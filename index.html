@@ -1,1098 +1,1512 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Link Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --accent:#6366f1;--accent2:#8b5cf6;--bg:#0f0f1a;--surface:#16162a;
-    --surface2:#1e1e35;--border:#2a2a4a;--text:#e2e2f0;--muted:#6b6b8a;
+  :root {
+    --accent: #6366f1;
+    --accent2: #8b5cf6;
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface2: #273548;
+    --border: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-  ::-webkit-scrollbar{width:5px;height:5px;}
-  ::-webkit-scrollbar-track{background:var(--bg);}
-  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-  /* ======= LOGIN ======= */
-  #loginPage{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0a18 0%,#12103a 50%,#0a0a18 100%);overflow:hidden;}
-  .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;animation:blobFloat 8s ease-in-out infinite;}
-  .blob1{width:420px;height:420px;background:radial-gradient(circle,#6366f1,#312e81);top:-100px;left:-100px;animation-delay:0s;}
-  .blob2{width:320px;height:320px;background:radial-gradient(circle,#8b5cf6,#4c1d95);bottom:-80px;right:-80px;animation-delay:-4s;}
-  .blob3{width:200px;height:200px;background:radial-gradient(circle,#06b6d4,#0e7490);top:50%;left:50%;animation-delay:-2s;}
-  @keyframes blobFloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-30px) scale(1.05);}}
-  .glass-card{background:rgba(22,22,42,.75);backdrop-filter:blur(24px);border:1px solid rgba(99,102,241,.2);border-radius:24px;padding:2.5rem 2rem;width:100%;max-width:400px;position:relative;z-index:1;box-shadow:0 32px 80px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);}
-  @keyframes shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-8px);}40%,80%{transform:translateX(8px);}}
-  .shake{animation:shake .4s ease;}
-  @keyframes pageEnter{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
-  .page-enter{animation:pageEnter .4s ease forwards;}
-  @keyframes contentFade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-  .content-fade{animation:contentFade .35s ease forwards;}
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-  /* ======= MAIN ======= */
-  #mainPage{display:none;min-height:100vh;}
-  .sidebar{width:260px;background:var(--surface);border-right:1px solid var(--border);min-height:100vh;position:fixed;top:0;left:0;z-index:40;transition:transform .3s ease;display:flex;flex-direction:column;}
-  .sidebar.hidden-mobile{transform:translateX(-100%);}
-  .main-content{margin-left:260px;min-height:100vh;display:flex;flex-direction:column;}
-  @media(max-width:768px){.main-content{margin-left:0;}.sidebar{box-shadow:4px 0 32px rgba(0,0,0,.5);}}
-  .nav-item{display:flex;align-items:center;gap:.75rem;padding:.65rem 1.1rem;border-radius:10px;cursor:pointer;transition:all .2s;color:var(--muted);font-size:.875rem;font-weight:500;position:relative;}
-  .nav-item:hover{background:rgba(99,102,241,.1);color:var(--text);}
-  .nav-item.active{background:linear-gradient(135deg,rgba(99,102,241,.25),rgba(139,92,246,.15));color:#a5b4fc;border:1px solid rgba(99,102,241,.2);}
-  .badge{background:var(--accent);color:#fff;font-size:.65rem;font-weight:700;padding:.1rem .45rem;border-radius:99px;min-width:18px;text-align:center;}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.2rem;transition:border-color .2s,box-shadow .2s;position:relative;}
-  .card:hover{border-color:rgba(99,102,241,.3);box-shadow:0 4px 24px rgba(99,102,241,.08);}
-  .input-field{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.6rem .9rem;color:var(--text);font-family:inherit;font-size:.875rem;width:100%;outline:none;transition:border-color .2s;}
-  .input-field:focus{border-color:var(--accent);}
-  .input-field::placeholder{color:var(--muted);}
-  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:10px;padding:.6rem 1.2rem;font-family:inherit;font-size:.875rem;font-weight:600;cursor:pointer;transition:opacity .2s,transform .2s;}
-  .btn-primary:hover{opacity:.9;transform:translateY(-1px);}
-  .btn-save-edit{background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;border:none;border-radius:10px;padding:.6rem 1.2rem;font-family:inherit;font-size:.875rem;font-weight:600;cursor:pointer;transition:opacity .2s,transform .2s;}
-  .btn-save-edit:hover{opacity:.9;transform:translateY(-1px);}
-  .btn-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:transparent;cursor:pointer;transition:background .2s,border-color .2s;}
-  .btn-icon-edit{border-color:rgba(99,102,241,.2);color:#818cf8;}
-  .btn-icon-edit:hover{background:rgba(99,102,241,.15);color:#a5b4fc;}
-  .btn-icon-trash{border-color:rgba(239,68,68,.15);color:#f87171;}
-  .btn-icon-trash:hover{background:rgba(239,68,68,.15);color:#fca5a5;}
-  .btn-icon-move{border-color:rgba(245,158,11,.15);color:#fbbf24;}
-  .btn-icon-move:hover{background:rgba(245,158,11,.15);color:#fde68a;}
-  .btn-icon-restore{border-color:rgba(34,197,94,.15);color:#4ade80;}
-  .btn-icon-restore:hover{background:rgba(34,197,94,.15);color:#86efac;}
-  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;}
-  .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.75rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 64px rgba(0,0,0,.5);}
-  @keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(12px);}to{opacity:1;transform:scale(1) translateY(0);}}
-  .modal-in{animation:modalIn .25s ease forwards;}
-  .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:.85rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:30;}
-  .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;}
-  select.input-field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b8a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center;}
-  select.input-field option{background:var(--surface2);}
-  .pw-wrap{position:relative;}
-  .pw-toggle{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:0;line-height:0;}
-  .pw-toggle:hover{color:var(--text);}
-  .overlay-sidebar{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:39;}
-  .overlay-sidebar.visible{display:block;}
-  .tag{display:inline-flex;align-items:center;padding:.15rem .55rem;border-radius:99px;font-size:.7rem;font-weight:600;}
-  .updated-label{font-size:.7rem;color:var(--muted);margin-top:.35rem;opacity:.75;}
+  /* Blobs */
+  .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18; animation: blobFloat 8s ease-in-out infinite; pointer-events: none; }
+  .blob1 { width: 420px; height: 420px; background: #6366f1; top: -120px; left: -100px; animation-delay: 0s; }
+  .blob2 { width: 320px; height: 320px; background: #8b5cf6; top: 40%; right: -80px; animation-delay: -3s; }
+  .blob3 { width: 280px; height: 280px; background: #06b6d4; bottom: -60px; left: 30%; animation-delay: -5s; }
+  @keyframes blobFloat {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(20px,-30px) scale(1.05); }
+    66% { transform: translate(-15px,20px) scale(0.97); }
+  }
+
+  /* Shake */
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    15%{transform:translateX(-8px)}
+    30%{transform:translateX(8px)}
+    45%{transform:translateX(-6px)}
+    60%{transform:translateX(6px)}
+    75%{transform:translateX(-3px)}
+    90%{transform:translateX(3px)}
+  }
+  .shake { animation: shake 0.5s ease-in-out; }
+
+  /* Page transitions */
+  @keyframes pageEnter {
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes pageExit {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(-12px) scale(0.98); }
+  }
+  @keyframes contentFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .page-enter { animation: pageEnter 0.4s cubic-bezier(.22,1,.36,1) forwards; }
+  .page-exit { animation: pageExit 0.25s ease-in forwards; }
+  .content-fade { animation: contentFade 0.35s ease forwards; }
+
+  /* Modal */
+  @keyframes modalSlide {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .modal-enter { animation: modalSlide 0.3s cubic-bezier(.22,1,.36,1) forwards; }
+
+  /* Count pulse */
+  @keyframes countPulse {
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.2)}
+  }
+  .count-pulse { animation: countPulse 0.4s ease; }
+
+  /* Login glassmorphism */
+  .glass-card {
+    background: rgba(30,41,59,0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(99,102,241,0.25);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
+  }
+
+  /* Form inputs */
+  .form-input {
+    width: 100%; background: rgba(15,23,42,0.7); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 14px; color: var(--text); font-size: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.18); }
+  .form-input::placeholder { color: var(--muted); }
+
+  /* Modern Select */
+  .form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none;
+    cursor: pointer;
+    width: 100%; background: rgba(15,23,42,0.7); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 40px 10px 14px; color: var(--text); font-size: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.18); }
+  .form-select.violet-focus:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(139,92,246,0.18); }
+  .form-select option { background-color: #1e293b; color: white; padding: 8px; }
+  .form-select optgroup { background-color: #0f172a; color: #a5b4fc; font-style: normal; font-weight: 600; }
+
+  /* Select wrapper */
+  .select-wrapper { position: relative; }
+  .select-wrapper .chevron-icon {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    pointer-events: none; color: var(--muted); transition: color 0.2s;
+  }
+  .select-wrapper:hover .chevron-icon { color: var(--text); }
+
+  /* Sidebar */
+  .sidebar-nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500;
+    color: var(--muted); transition: all 0.2s; position: relative;
+  }
+  .sidebar-nav-item:hover { background: rgba(99,102,241,0.1); color: var(--text); }
+  .sidebar-nav-item.active { background: rgba(99,102,241,0.18); color: #a5b4fc; }
+  .sidebar-nav-item.active::before {
+    content:''; position:absolute; left:0; top:20%; height:60%; width:3px;
+    background: linear-gradient(to bottom, #6366f1, #8b5cf6); border-radius: 0 2px 2px 0;
+  }
+
+  /* Card */
+  .link-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .link-card:hover { border-color: rgba(99,102,241,0.4); box-shadow: 0 4px 24px rgba(99,102,241,0.08); }
+
+  /* Badge */
+  .badge {
+    display: inline-flex; align-items: center; padding: 2px 8px;
+    border-radius: 99px; font-size: 11px; font-weight: 600; letter-spacing: 0.03em;
+  }
+
+  /* Btn */
+  .btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white; border: none; border-radius: 10px;
+    padding: 10px 20px; font-weight: 600; font-size: 14px; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(99,102,241,0.3);
+  }
+  .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,102,241,0.4); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-secondary {
+    background: rgba(99,102,241,0.1); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 10px; padding: 10px 20px; font-weight: 600; font-size: 14px; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: rgba(99,102,241,0.18); }
+  .btn-danger { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; font-size: 13px; }
+  .btn-danger:hover { background: rgba(239,68,68,0.22); }
+  .btn-icon { background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 6px; transition: background 0.2s; color: var(--muted); }
+  .btn-icon:hover { background: rgba(99,102,241,0.12); color: #a5b4fc; }
+
+  /* Mobile overlay */
+  #sidebarOverlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 30; }
+  #sidebarOverlay.show { display: block; }
+
+  /* Password toggle */
+  .pw-wrap { position: relative; }
+  .pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); padding: 2px; }
+  .pw-toggle:hover { color: var(--text); }
+
+  /* Countdown ring */
+  @keyframes cdTick { from{stroke-dashoffset:0} }
+
+  /* Updated indicator */
+  .updated-badge { font-size: 11px; color: #34d399; display: flex; align-items: center; gap: 4px; }
+
+  /* Error text */
+  .field-err { font-size: 11px; color: #f87171; margin-top: 4px; display: none; }
+  .field-err.show { display: block; }
+
+  /* Tooltip */
+  .tooltip-wrap { position: relative; display: inline-block; }
+  .tooltip-wrap:hover .tooltip-box { opacity: 1; visibility: visible; transform: translateY(0); }
+  .tooltip-box {
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(4px);
+    background: #1e293b; border: 1px solid var(--border); border-radius: 6px;
+    padding: 4px 10px; font-size: 11px; white-space: nowrap; color: var(--text);
+    opacity: 0; visibility: hidden; transition: all 0.15s; pointer-events: none; z-index: 99;
+  }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); transition: transform 0.3s cubic-bezier(.22,1,.36,1); position: fixed; z-index: 40; height: 100vh; }
+    #sidebar.open { transform: translateX(0); }
+    #mainContent { margin-left: 0 !important; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ========== LOGIN PAGE ========== -->
-<div id="loginPage">
+<!-- ===== LOGIN PAGE ===== -->
+<div id="loginPage" class="relative min-h-screen flex items-center justify-center overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);">
   <div class="blob blob1"></div>
   <div class="blob blob2"></div>
   <div class="blob blob3"></div>
-  <div class="glass-card page-enter" id="loginCard">
-    <div style="text-align:center;margin-bottom:1.75rem;">
-      <div style="width:52px;height:52px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:14px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:.85rem;box-shadow:0 8px 24px rgba(99,102,241,.4);">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+
+  <div class="glass-card w-full max-w-md mx-4 p-8 rounded-2xl relative z-10 page-enter" id="loginCard">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 8px 32px rgba(99,102,241,0.4);">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+        </svg>
       </div>
-      <h1 style="font-size:1.4rem;font-weight:800;color:#e2e2f0;">Link Dashboard</h1>
-      <p style="font-size:.8rem;color:#6b6b8a;margin-top:.25rem;">Masuk untuk melanjutkan</p>
+      <h1 class="text-2xl font-bold text-white">Link Dashboard</h1>
+      <p style="color: var(--muted); font-size: 14px; margin-top: 4px;">Masuk untuk mengelola link Anda</p>
     </div>
-    <div id="loginAlert" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:.65rem .9rem;font-size:.8rem;color:#fca5a5;margin-bottom:1rem;"></div>
-    <div id="lockoutBanner" style="display:none;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:.65rem .9rem;font-size:.8rem;color:#fde68a;margin-bottom:1rem;"></div>
-    <div style="display:flex;flex-direction:column;gap:.9rem;">
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;margin-bottom:.4rem;display:block;">Username</label>
-        <input id="loginUser" class="input-field" type="text" placeholder="Masukkan username" autocomplete="username"/>
+
+    <!-- Warning -->
+    <div id="loginWarning" class="hidden mb-4 p-3 rounded-xl text-sm" style="background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25); color: #f87171;"></div>
+    <!-- Lockout notice -->
+    <div id="lockoutNotice" class="hidden mb-4 p-3 rounded-xl text-sm text-center" style="background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25); color: #f87171;"></div>
+    <!-- Default creds notice -->
+    <div class="mb-4 p-3 rounded-xl text-xs" style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: #a5b4fc;">
+      Default: <strong>admin</strong> / <strong>admin123</strong>
+    </div>
+
+    <form id="loginForm" onsubmit="return handleLogin(event)">
+      <div class="mb-4">
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Username</label>
+        <input type="text" id="loginUser" class="form-input" placeholder="Masukkan username" autocomplete="username">
       </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;margin-bottom:.4rem;display:block;">Password</label>
+      <div class="mb-4">
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Password</label>
         <div class="pw-wrap">
-          <input id="loginPass" class="input-field" type="password" placeholder="Masukkan password" autocomplete="current-password" style="padding-right:2.5rem;"/>
-          <button class="pw-toggle" onclick="togglePw('loginPass',this)" type="button" title="Tampilkan/Sembunyikan">
-            <svg id="eyeLogin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <input type="password" id="loginPass" class="form-input" placeholder="Masukkan password" autocomplete="current-password" style="padding-right: 44px;">
+          <button type="button" class="pw-toggle" onclick="togglePw('loginPass',this)">
+            <svg id="eyeIconLogin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:.5rem;">
-        <input type="checkbox" id="rememberMe" style="accent-color:var(--accent);width:15px;height:15px;cursor:pointer;"/>
-        <label for="rememberMe" style="font-size:.8rem;color:#9ca3af;cursor:pointer;">Ingat saya</label>
+      <div class="flex items-center mb-6">
+        <input type="checkbox" id="rememberMe" class="mr-2" style="accent-color: var(--accent); width: 16px; height: 16px;">
+        <label for="rememberMe" style="font-size: 13px; color: var(--muted); cursor: pointer;">Ingat saya</label>
       </div>
-      <button onclick="doLogin()" class="btn-primary" style="width:100%;padding:.75rem;font-size:.9rem;margin-top:.25rem;">Masuk</button>
-    </div>
-    <p style="text-align:center;font-size:.72rem;color:#4b4b6a;margin-top:1.25rem;">Default: admin / admin123</p>
+      <button type="submit" id="loginBtn" class="btn-primary w-full py-3">Masuk</button>
+    </form>
   </div>
 </div>
 
-<!-- ========== MAIN PAGE ========== -->
-<div id="mainPage">
+<!-- ===== DASHBOARD PAGE ===== -->
+<div id="dashboardPage" class="hidden min-h-screen flex" style="background: var(--bg);">
+
   <!-- Sidebar overlay (mobile) -->
-  <div class="overlay-sidebar" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <div id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
 
   <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div style="padding:1.25rem 1.1rem 1rem;border-bottom:1px solid var(--border);">
-      <div style="display:flex;align-items:center;gap:.65rem;">
-        <div style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-        </div>
-        <div>
-          <div style="font-size:.9rem;font-weight:800;color:#e2e2f0;">LinkVault</div>
-          <div style="font-size:.68rem;color:#6b6b8a;">Dashboard</div>
-        </div>
+  <aside id="sidebar" class="w-64 flex-shrink-0 flex flex-col" style="background: rgba(15,23,42,0.95); border-right: 1px solid var(--border); min-height: 100vh;">
+    <!-- Logo -->
+    <div class="p-5 flex items-center gap-3" style="border-bottom: 1px solid var(--border);">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+        </svg>
+      </div>
+      <div>
+        <div class="font-bold text-white text-sm">Link Dashboard</div>
+        <div style="font-size: 11px; color: var(--muted);">v4.0</div>
       </div>
     </div>
-    <nav style="padding:.75rem .65rem;flex:1;">
-      <div style="font-size:.65rem;font-weight:700;color:#4b4b6a;letter-spacing:.08em;padding:.35rem .5rem .25rem;text-transform:uppercase;">Menu</div>
-      <div class="nav-item active" id="nav-active" onclick="switchMenu('active')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-        Link Aktif
-        <span class="badge" id="badge-active">0</span>
+
+    <!-- Nav -->
+    <nav class="p-3 flex-1 overflow-y-auto">
+      <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--muted); padding: 8px 14px 4px; text-transform: uppercase;">Menu</div>
+      <div class="sidebar-nav-item active" id="nav-active" onclick="switchMenu('active')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        <span>Link Aktif</span>
+        <span id="badgeActive" class="badge ml-auto" style="background: rgba(99,102,241,0.2); color: #a5b4fc; font-size: 11px;">0</span>
       </div>
-      <div class="nav-item" id="nav-login" onclick="switchMenu('login')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Data Login Link Bio
-        <span class="badge" id="badge-login">0</span>
+      <div class="sidebar-nav-item" id="nav-login" onclick="switchMenu('login')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span style="font-size: 13px;">Data Login</span>
+        <span id="badgeLogin" class="badge ml-auto" style="background: rgba(139,92,246,0.2); color: #c4b5fd; font-size: 11px;">0</span>
       </div>
-      <div class="nav-item" id="nav-unused" onclick="switchMenu('unused')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        Link Diarsipkan
-        <span class="badge" id="badge-unused" style="background:#6b6b8a;">0</span>
+      <div class="sidebar-nav-item" id="nav-unused" onclick="switchMenu('unused')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        <span>Tidak Digunakan</span>
+        <span id="badgeUnused" class="badge ml-auto" style="background: rgba(251,146,60,0.2); color: #fdba74; font-size: 11px;">0</span>
       </div>
     </nav>
-    <div style="padding:.85rem;border-top:1px solid var(--border);">
-      <button onclick="doLogout()" style="width:100%;display:flex;align-items:center;gap:.6rem;padding:.6rem .85rem;border-radius:10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);color:#f87171;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='rgba(239,68,68,.15)'" onmouseout="this.style.background='rgba(239,68,68,.08)'">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Logout
-      </button>
+
+    <!-- Sidebar footer -->
+    <div class="p-4" style="border-top: 1px solid var(--border);">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); font-size: 13px; font-weight: 700;">
+          <span id="sidebarAvatarText">A</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div style="font-size: 13px; font-weight: 600; color: var(--text);" id="sidebarUsername">admin</div>
+          <div style="font-size: 11px; color: var(--muted);">Administrator</div>
+        </div>
+      </div>
     </div>
   </aside>
 
-  <!-- Main -->
-  <div class="main-content" id="mainContent">
+  <!-- Main area -->
+  <div id="mainContent" class="flex-1 flex flex-col min-h-screen overflow-hidden">
     <!-- Topbar -->
-    <div class="topbar">
-      <button id="hamburger" onclick="toggleSidebar()" style="display:none;background:none;border:none;cursor:pointer;color:var(--text);padding:.2rem;" aria-label="Menu">
+    <header class="flex items-center gap-3 px-5 py-4 flex-shrink-0" style="background: rgba(15,23,42,0.9); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px);">
+      <button class="btn-icon md:hidden" onclick="toggleSidebar(true)">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
-      <div style="flex:1;">
-        <h2 id="pageTitle" style="font-size:1rem;font-weight:700;color:#e2e2f0;">Link Aktif</h2>
-        <p id="pageSubtitle" style="font-size:.72rem;color:#6b6b8a;margin-top:.05rem;"></p>
+      <div class="flex-1">
+        <h2 id="topbarTitle" class="font-bold text-white text-lg">Link Aktif</h2>
+        <p id="topbarSub" style="font-size: 12px; color: var(--muted);">Kelola link aktif Anda</p>
       </div>
-      <div id="defaultCredsBadge" style="display:none;">
-        <span style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:#fde68a;font-size:.7rem;font-weight:600;padding:.25rem .65rem;border-radius:99px;">Ubah password default!</span>
+      <!-- Default creds warning -->
+      <div id="defaultCredsWarn" class="hidden items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium" style="background: rgba(251,146,60,0.12); border: 1px solid rgba(251,146,60,0.25); color: #fdba74;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Kredensial default!
       </div>
-      <div style="display:flex;align-items:center;gap:.65rem;flex-shrink:0;">
-        <div class="avatar" id="topbarAvatar">A</div>
-        <div style="display:none;" id="topbarName">
-          <div style="font-size:.8rem;font-weight:600;color:#e2e2f0;" id="topbarUsername">admin</div>
+      <!-- Avatar + username -->
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); font-size: 12px; font-weight: 700;">
+          <span id="topbarAvatarText">A</span>
         </div>
+        <span id="topbarUsername" class="hidden md:block text-sm font-semibold text-white">admin</span>
       </div>
-    </div>
+      <button onclick="handleLogout()" class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all" style="background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2);" onmouseover="this.style.background='rgba(239,68,68,0.22)'" onmouseout="this.style.background='rgba(239,68,68,0.12)'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span class="hidden sm:inline">Logout</span>
+      </button>
+    </header>
 
     <!-- Content area -->
-    <div style="flex:1;padding:1.5rem;" id="contentArea">
-      <!-- Rendered by JS -->
-    </div>
-  </div>
-</div>
+    <main class="flex-1 overflow-y-auto p-5">
 
-<!-- ========== MODAL ACTIVE/UNUSED ========== -->
-<div class="modal-backdrop" id="modalActive" style="display:none;" onclick="closeModalActive(event)">
-  <div class="modal-box modal-in" onclick="event.stopPropagation()">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
-      <h3 id="modalActiveTitle" style="font-size:1rem;font-weight:700;color:#e2e2f0;">Tambah Link Aktif</h3>
-      <button onclick="closeModalActive()" style="background:none;border:none;cursor:pointer;color:var(--muted);">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div id="modalActiveErr" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:.6rem .85rem;font-size:.8rem;color:#fca5a5;margin-bottom:.9rem;"></div>
-    <div style="display:flex;flex-direction:column;gap:.9rem;">
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Nama Platform / Website *</label>
-        <input id="aName" class="input-field" type="text" placeholder="cth: Instagram, TikTok"/>
-      </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">URL Link *</label>
-        <input id="aUrl" class="input-field" type="text" placeholder="https://..."/>
-      </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Kategori</label>
-        <input id="aCat" class="input-field" type="text" placeholder="cth: Social Media, Blog"/>
-      </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Catatan</label>
-        <textarea id="aNote" class="input-field" rows="2" placeholder="Opsional..." style="resize:vertical;"></textarea>
-      </div>
-      <button id="modalActiveBtn" onclick="submitActive()" class="btn-primary" style="width:100%;padding:.7rem;font-size:.875rem;margin-top:.25rem;">Simpan</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== MODAL LOGIN ========== -->
-<div class="modal-backdrop" id="modalLogin" style="display:none;" onclick="closeModalLogin(event)">
-  <div class="modal-box modal-in" onclick="event.stopPropagation()">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
-      <h3 id="modalLoginTitle" style="font-size:1rem;font-weight:700;color:#e2e2f0;">Tambah Data Login</h3>
-      <button onclick="closeModalLogin()" style="background:none;border:none;cursor:pointer;color:var(--muted);">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div id="modalLoginErr" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:.6rem .85rem;font-size:.8rem;color:#fca5a5;margin-bottom:.9rem;"></div>
-    <div style="display:flex;flex-direction:column;gap:.9rem;">
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Nama Platform *</label>
-        <input id="lName" class="input-field" type="text" placeholder="cth: Linktree, Milkshake"/>
-      </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Kategori / Logo</label>
-        <input id="lCat" class="input-field" type="text" placeholder="cth: Link Bio, Analytics"/>
-      </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">URL Login *</label>
-        <input id="lUrl" class="input-field" type="text" placeholder="https://..."/>
-      </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Username / Email *</label>
-        <input id="lUser" class="input-field" type="text" placeholder="username atau email"/>
-      </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Password *</label>
-        <div class="pw-wrap">
-          <input id="lPass" class="input-field" type="password" placeholder="password" style="padding-right:2.5rem;"/>
-          <button class="pw-toggle" onclick="togglePw('lPass',this)" type="button">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      <!-- MENU: LINK AKTIF -->
+      <section id="menu-active" class="content-fade">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
+          <div class="flex-1">
+            <input type="text" id="searchActive" class="form-input" placeholder="Cari link aktif..." oninput="renderActive()" style="max-width: 340px;">
+          </div>
+          <button class="btn-primary flex items-center gap-2" onclick="openAddActive()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Link
           </button>
         </div>
-      </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Link Aktif Terkait</label>
-        <select id="lLinked" class="input-field">
-          <option value="">-- Tidak ada --</option>
-        </select>
-      </div>
-      <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Catatan</label>
-        <textarea id="lNote" class="input-field" rows="2" placeholder="Opsional..." style="resize:vertical;"></textarea>
-      </div>
-      <button id="modalLoginBtn" onclick="submitLogin()" class="btn-primary" style="width:100%;padding:.7rem;font-size:.875rem;margin-top:.25rem;">Simpan</button>
-    </div>
+        <div id="listActive" class="grid gap-4"></div>
+        <div id="emptyActive" class="hidden text-center py-16">
+          <div style="color: var(--muted); font-size: 14px;">Belum ada link aktif</div>
+        </div>
+      </section>
+
+      <!-- MENU: DATA LOGIN -->
+      <section id="menu-login" class="hidden content-fade">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
+          <div class="flex-1">
+            <input type="text" id="searchLogin" class="form-input" placeholder="Cari data login..." oninput="renderLogin()" style="max-width: 340px;">
+          </div>
+          <button class="btn-primary flex items-center gap-2" onclick="openAddLogin()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Data
+          </button>
+        </div>
+        <div id="listLogin" class="grid gap-4"></div>
+        <div id="emptyLogin" class="hidden text-center py-16">
+          <div style="color: var(--muted); font-size: 14px;">Belum ada data login</div>
+        </div>
+      </section>
+
+      <!-- MENU: TIDAK DIGUNAKAN -->
+      <section id="menu-unused" class="hidden content-fade">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
+          <div class="flex-1">
+            <input type="text" id="searchUnused" class="form-input" placeholder="Cari link arsip..." oninput="renderUnused()" style="max-width: 340px;">
+          </div>
+        </div>
+        <div id="listUnused" class="grid gap-4"></div>
+        <div id="emptyUnused" class="hidden text-center py-16">
+          <div style="color: var(--muted); font-size: 14px;">Belum ada link yang diarsipkan</div>
+        </div>
+      </section>
+
+    </main>
   </div>
 </div>
 
-<!-- ========== MODAL EDIT UNUSED ========== -->
-<div class="modal-backdrop" id="modalUnused" style="display:none;" onclick="closeModalUnused(event)">
-  <div class="modal-box modal-in" onclick="event.stopPropagation()">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
-      <h3 id="modalUnusedTitle" style="font-size:1rem;font-weight:700;color:#e2e2f0;">Edit Link Diarsipkan</h3>
-      <button onclick="closeModalUnused()" style="background:none;border:none;cursor:pointer;color:var(--muted);">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+<!-- ===== MODAL: LINK AKTIF ===== -->
+<div id="modalActive" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);">
+  <div class="modal-enter glass-card w-full max-w-lg mx-4 rounded-2xl overflow-hidden" style="max-height: 90vh; overflow-y: auto;" id="modalActiveInner">
+    <div class="flex items-center justify-between p-5" style="border-bottom: 1px solid var(--border);">
+      <h3 id="modalActiveTitle" class="font-bold text-white text-lg">Tambah Link Aktif</h3>
+      <button class="btn-icon" onclick="closeModal('active')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <div id="modalUnusedErr" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:.6rem .85rem;font-size:.8rem;color:#fca5a5;margin-bottom:.9rem;"></div>
-    <div style="display:flex;flex-direction:column;gap:.9rem;">
+    <div class="p-5 space-y-4">
+      <!-- Platform dropdown -->
       <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Nama Platform / Website *</label>
-        <input id="uName" class="input-field" type="text" placeholder="cth: Instagram"/>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Nama Platform / Website</label>
+        <div class="select-wrapper">
+          <select id="al_name" class="form-select" onchange="handlePlatformChange()">
+            <option value="" disabled selected>-- Pilih Platform --</option>
+            <optgroup label="Link Bio">
+              <option value="Linktree">Linktree</option>
+              <option value="Beacons">Beacons</option>
+              <option value="Bio.link">Bio.link</option>
+              <option value="Taplink">Taplink</option>
+              <option value="Milkshake">Milkshake</option>
+              <option value="Heylink">Heylink</option>
+              <option value="InstaBio">InstaBio</option>
+            </optgroup>
+            <optgroup label="Media Sosial">
+              <option value="Instagram">Instagram</option>
+              <option value="TikTok">TikTok</option>
+              <option value="YouTube">YouTube</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Twitter / X">Twitter / X</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Threads">Threads</option>
+              <option value="Pinterest">Pinterest</option>
+              <option value="Snapchat">Snapchat</option>
+            </optgroup>
+            <optgroup label="E-Commerce">
+              <option value="Shopify">Shopify</option>
+              <option value="Tokopedia">Tokopedia</option>
+              <option value="Shopee">Shopee</option>
+              <option value="Lazada">Lazada</option>
+              <option value="Bukalapak">Bukalapak</option>
+            </optgroup>
+            <optgroup label="Blog / Website">
+              <option value="WordPress">WordPress</option>
+              <option value="Blogspot">Blogspot</option>
+              <option value="Medium">Medium</option>
+              <option value="Notion">Notion</option>
+              <option value="Carrd">Carrd</option>
+              <option value="Wix">Wix</option>
+            </optgroup>
+            <optgroup label="Lainnya">
+              <option value="Website Pribadi">Website Pribadi</option>
+              <option value="__custom__">+ Platform Lainnya (Custom)</option>
+            </optgroup>
+          </select>
+          <span class="chevron-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+        <!-- Custom input -->
+        <div id="customPlatformWrap" class="hidden mt-2">
+          <input type="text" id="al_customName" class="form-input" placeholder="Misalnya: MyCustom.site">
+        </div>
+        <div id="nameErr" class="field-err">Nama platform wajib diisi.</div>
+      </div>
+      <!-- Category dropdown -->
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Kategori</label>
+        <div class="select-wrapper">
+          <select id="al_category" class="form-select violet-focus">
+            <option value="" disabled selected>-- Pilih Kategori --</option>
+            <optgroup label="Konten">
+              <option value="Personal Branding">Personal Branding</option>
+              <option value="Link Bio">Link Bio</option>
+              <option value="Landing Page">Landing Page</option>
+            </optgroup>
+            <optgroup label="Bisnis">
+              <option value="Jualan Online">Jualan Online</option>
+              <option value="Toko Online">Toko Online</option>
+              <option value="Affiliate">Affiliate</option>
+            </optgroup>
+            <optgroup label="Pribadi">
+              <option value="Portofolio">Portofolio</option>
+              <option value="Komunitas">Komunitas</option>
+              <option value="Blog">Blog</option>
+              <option value="Media Sosial">Media Sosial</option>
+            </optgroup>
+            <optgroup label="Tools">
+              <option value="Tools / Aplikasi">Tools / Aplikasi</option>
+              <option value="Dokumentasi">Dokumentasi</option>
+            </optgroup>
+            <optgroup label="Lainnya">
+              <option value="Lainnya">Lainnya</option>
+            </optgroup>
+          </select>
+          <span class="chevron-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+        <div id="catErr" class="field-err">Kategori wajib dipilih.</div>
       </div>
       <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">URL Link *</label>
-        <input id="uUrl" class="input-field" type="text" placeholder="https://..."/>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">URL Link</label>
+        <input type="url" id="al_url" class="form-input" placeholder="https://...">
+        <div id="urlErr" class="field-err">URL wajib diisi.</div>
       </div>
       <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Kategori</label>
-        <input id="uCat" class="input-field" type="text" placeholder="cth: Social Media"/>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Tanggal Aktif</label>
+        <input type="date" id="al_date" class="form-input">
       </div>
       <div>
-        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Catatan</label>
-        <textarea id="uNote" class="input-field" rows="2" style="resize:vertical;"></textarea>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Catatan</label>
+        <textarea id="al_note" class="form-input" rows="3" placeholder="Catatan opsional..." style="resize: vertical;"></textarea>
       </div>
-      <button id="modalUnusedBtn" onclick="submitUnused()" class="btn-save-edit" style="width:100%;padding:.7rem;font-size:.875rem;margin-top:.25rem;">Simpan Perubahan</button>
+    </div>
+    <div class="flex gap-3 p-5" style="border-top: 1px solid var(--border);">
+      <button class="btn-secondary flex-1" onclick="closeModal('active')">Batal</button>
+      <button id="btnSaveActive" class="btn-primary flex-1" onclick="saveActive()">Simpan</button>
     </div>
   </div>
 </div>
 
-<!-- ========== CONFIRM MODAL ========== -->
-<div class="modal-backdrop" id="modalConfirm" style="display:none;" onclick="closeConfirm()">
-  <div class="modal-box modal-in" style="max-width:380px;" onclick="event.stopPropagation()">
-    <div style="text-align:center;padding:.5rem 0 1rem;">
-      <div id="confirmIcon" style="width:48px;height:48px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:.85rem;"></div>
-      <h3 id="confirmTitle" style="font-size:.95rem;font-weight:700;color:#e2e2f0;margin-bottom:.5rem;"></h3>
-      <p id="confirmMsg" style="font-size:.82rem;color:#9ca3af;line-height:1.5;"></p>
+<!-- ===== MODAL: DATA LOGIN ===== -->
+<div id="modalLogin" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);">
+  <div class="modal-enter glass-card w-full max-w-lg mx-4 rounded-2xl overflow-hidden" style="max-height: 90vh; overflow-y: auto;">
+    <div class="flex items-center justify-between p-5" style="border-bottom: 1px solid var(--border);">
+      <h3 id="modalLoginTitle" class="font-bold text-white text-lg">Tambah Data Login</h3>
+      <button class="btn-icon" onclick="closeModal('login')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
-    <div style="display:flex;gap:.75rem;margin-top:.5rem;">
-      <button onclick="closeConfirm()" style="flex:1;padding:.65rem;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;">Batal</button>
-      <button id="confirmOkBtn" style="flex:1;padding:.65rem;border-radius:10px;border:none;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:#fff;"></button>
+    <div class="p-5 space-y-4">
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Platform / Layanan</label>
+        <input type="text" id="ll_platform" class="form-input" placeholder="Nama platform">
+        <div id="llPlatformErr" class="field-err">Platform wajib diisi.</div>
+      </div>
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Username / Email</label>
+        <input type="text" id="ll_user" class="form-input" placeholder="Username atau email">
+        <div id="llUserErr" class="field-err">Username/Email wajib diisi.</div>
+      </div>
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="ll_pass" class="form-input" placeholder="Password" style="padding-right: 44px;">
+          <button type="button" class="pw-toggle" onclick="togglePw('ll_pass',this)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div id="llPassErr" class="field-err">Password wajib diisi.</div>
+      </div>
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Link Terkait</label>
+        <select id="ll_link" class="form-select">
+          <option value="">-- Pilih Link (Opsional) --</option>
+        </select>
+        <span class="chevron-icon" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted);">
+        </span>
+      </div>
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Catatan</label>
+        <textarea id="ll_note" class="form-input" rows="2" placeholder="Catatan opsional..." style="resize: vertical;"></textarea>
+      </div>
+    </div>
+    <div class="flex gap-3 p-5" style="border-top: 1px solid var(--border);">
+      <button class="btn-secondary flex-1" onclick="closeModal('login')">Batal</button>
+      <button id="btnSaveLogin" class="btn-primary flex-1" onclick="saveLogin()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: UNUSED ===== -->
+<div id="modalUnused" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);">
+  <div class="modal-enter glass-card w-full max-w-lg mx-4 rounded-2xl overflow-hidden" style="max-height: 90vh; overflow-y: auto;">
+    <div class="flex items-center justify-between p-5" style="border-bottom: 1px solid var(--border);">
+      <h3 id="modalUnusedTitle" class="font-bold text-white text-lg">Edit Link Arsip</h3>
+      <button class="btn-icon" onclick="closeModal('unused')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="p-5 space-y-4">
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Nama Platform</label>
+        <input type="text" id="ul_name" class="form-input" placeholder="Nama platform">
+        <div id="ulNameErr" class="field-err">Nama wajib diisi.</div>
+      </div>
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Kategori</label>
+        <input type="text" id="ul_category" class="form-input" placeholder="Kategori">
+      </div>
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">URL</label>
+        <input type="url" id="ul_url" class="form-input" placeholder="https://...">
+      </div>
+      <div>
+        <label style="font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">Catatan</label>
+        <textarea id="ul_note" class="form-input" rows="2" placeholder="Catatan opsional..." style="resize: vertical;"></textarea>
+      </div>
+    </div>
+    <div class="flex gap-3 p-5" style="border-top: 1px solid var(--border);">
+      <button class="btn-secondary flex-1" onclick="closeModal('unused')">Batal</button>
+      <button id="btnSaveUnused" class="btn-primary flex-1" onclick="saveUnused()">Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: KONFIRMASI PINDAHKAN ===== -->
+<div id="modalConfirm" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);">
+  <div class="modal-enter glass-card w-full max-w-sm mx-4 rounded-2xl p-6 text-center">
+    <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style="background: rgba(251,146,60,0.15); border: 1px solid rgba(251,146,60,0.3);">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <h3 class="font-bold text-white text-lg mb-2">Pindahkan ke Arsip?</h3>
+    <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Link ini akan dipindahkan ke daftar Tidak Digunakan. Anda bisa memulihkannya kapan saja.</p>
+    <div class="flex gap-3">
+      <button class="btn-secondary flex-1" onclick="closeModal('confirm')">Batal</button>
+      <button class="btn-primary flex-1" style="background: linear-gradient(135deg,#f97316,#ef4444);" onclick="confirmMove()">Ya, Pindahkan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: KONFIRMASI HAPUS ===== -->
+<div id="modalDelete" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);">
+  <div class="modal-enter glass-card w-full max-w-sm mx-4 rounded-2xl p-6 text-center">
+    <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style="background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25);">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    </div>
+    <h3 class="font-bold text-white text-lg mb-2">Hapus Data?</h3>
+    <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Data ini akan dihapus permanen. Tindakan ini tidak bisa dibatalkan.</p>
+    <div class="flex gap-3">
+      <button class="btn-secondary flex-1" onclick="closeModal('delete')">Batal</button>
+      <button class="btn-primary flex-1" style="background: linear-gradient(135deg,#ef4444,#b91c1c);" onclick="confirmDelete()">Hapus</button>
     </div>
   </div>
 </div>
 
 <script>
-// ============================================================
-// SECTION: UTILITIES
-// ============================================================
-function esc(s){
-  if(s==null)return'';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
-function fmtDate(ts){
-  if(!ts)return'';
-  const d=new Date(ts);
-  return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
-}
-function fmtDateTime(ts){
-  if(!ts)return'';
-  const d=new Date(ts);
-  return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+// ===================== CONSTANTS & PLATFORMS =====================
+const PLATFORMS = [
+  'Linktree','Beacons','Bio.link','Taplink','Milkshake','Heylink','InstaBio',
+  'Instagram','TikTok','YouTube','Facebook','Twitter / X','LinkedIn','Threads','Pinterest','Snapchat',
+  'Shopify','Tokopedia','Shopee','Lazada','Bukalapak',
+  'WordPress','Blogspot','Medium','Notion','Carrd','Wix',
+  'Website Pribadi'
+];
+
+function platformDot(name) {
+  const map = {
+    'Instagram': '#ec4899',
+    'TikTok': '#0f172a',
+    'YouTube': '#ef4444',
+    'Facebook': '#2563eb',
+    'Twitter / X': '#334155',
+    'LinkedIn': '#1d4ed8',
+    'Linktree': '#22c55e',
+    'Beacons': '#6366f1',
+    'Tokopedia': '#16a34a',
+    'Shopee': '#f97316',
+    'Shopify': '#16a34a',
+    'WordPress': '#1d4ed8',
+    'Pinterest': '#ef4444',
+    'Threads': '#94a3b8',
+    'Snapchat': '#fbbf24',
+    'Medium': '#f8fafc',
+    'Bio.link': '#8b5cf6',
+    'Taplink': '#06b6d4',
+    'Milkshake': '#ec4899',
+    'Heylink': '#f97316',
+    'Carrd': '#22d3ee',
+    'Notion': '#e2e8f0',
+    'Lazada': '#f97316',
+    'Bukalapak': '#ef4444',
+    'Blogspot': '#f97316',
+    'Wix': '#facc15',
+    'LinkedIn': '#2563eb',
+  };
+  return map[name] || '#6366f1';
 }
 
-// FNV-1a multi-round hash with salt
-function fnvHash(str,salt='ld2024'){
-  let h=2166136261>>>0;
-  const s=salt+str+salt.split('').reverse().join('');
-  for(let r=0;r<5;r++){
-    for(let i=0;i<s.length;i++){
-      h^=s.charCodeAt(i);
-      h=Math.imul(h,16777619)>>>0;
+const catBadgeColor = {
+  'Link Bio': 'rgba(99,102,241,0.2);color:#a5b4fc',
+  'Landing Page': 'rgba(6,182,212,0.2);color:#67e8f9',
+  'Portofolio': 'rgba(139,92,246,0.2);color:#c4b5fd',
+  'Portfolio': 'rgba(139,92,246,0.2);color:#c4b5fd',
+  'Toko Online': 'rgba(34,197,94,0.2);color:#86efac',
+  'Media Sosial': 'rgba(236,72,153,0.2);color:#f9a8d4',
+  'Blog': 'rgba(251,146,60,0.2);color:#fdba74',
+  'Lainnya': 'rgba(148,163,184,0.2);color:#cbd5e1',
+  'Personal Branding': 'rgba(139,92,246,0.2);color:#c4b5fd',
+  'Jualan Online': 'rgba(249,115,22,0.2);color:#fdba74',
+  'Affiliate': 'rgba(234,179,8,0.2);color:#fde68a',
+  'Komunitas': 'rgba(20,184,166,0.2);color:#5eead4',
+  'Tools / Aplikasi': 'rgba(59,130,246,0.2);color:#93c5fd',
+  'Dokumentasi': 'rgba(100,116,139,0.2);color:#94a3b8',
+  'E-Commerce': 'rgba(34,197,94,0.2);color:#86efac',
+};
+
+function catBadge(cat) {
+  const style = catBadgeColor[cat] || 'rgba(148,163,184,0.2);color:#cbd5e1';
+  const parts = style.split(';');
+  return `<span class="badge" style="background:${parts[0]};${parts[1]}">${cat}</span>`;
+}
+
+// ===================== HASH (FNV-1a multi-round) =====================
+function fnv1a(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = (h * 16777619) >>> 0;
+  }
+  return h.toString(16);
+}
+function hashPassword(pass) {
+  const salt = 'LnkDsh$2024!';
+  let h = pass + salt;
+  for (let i = 0; i < 5; i++) h = fnv1a(h + salt);
+  return h;
+}
+const DEFAULT_HASH = hashPassword('admin123');
+
+// ===================== DATA =====================
+function getDB() {
+  try {
+    const d = JSON.parse(localStorage.getItem('linkDashboardData'));
+    if (d && d.activeLinks && d.loginData && d.unusedLinks) return d;
+  } catch(e) {}
+  return null;
+}
+function saveDB(d) {
+  localStorage.setItem('linkDashboardData', JSON.stringify(d));
+}
+function getAuth() {
+  try { return JSON.parse(localStorage.getItem('linkDashboardAuth')); } catch(e) { return null; }
+}
+function saveAuth(a) { localStorage.setItem('linkDashboardAuth', JSON.stringify(a)); }
+
+function initDB() {
+  if (getDB()) return;
+  const now = Date.now();
+  const d = {
+    activeLinks: [
+      { id: uid(), name: 'Linktree', url: 'https://linktr.ee/example', category: 'Link Bio', date: '2024-01-15', note: 'Link bio utama untuk semua platform', createdAt: now - 8640000 * 10 },
+      { id: uid(), name: 'Instagram', url: 'https://instagram.com/example', category: 'Media Sosial', date: '2024-02-01', note: 'Akun Instagram utama', createdAt: now - 8640000 * 5 },
+      { id: uid(), name: 'Tokopedia', url: 'https://tokopedia.com/example', category: 'Toko Online', date: '2024-03-10', note: 'Toko resmi Tokopedia', createdAt: now - 8640000 * 2 },
+    ],
+    loginData: [
+      { id: uid(), platform: 'Linktree', username: 'admin@example.com', password: 'linktree_pass_123', linkedUrl: 'https://linktr.ee/example', note: 'Akun utama linktree', createdAt: now - 8640000 * 10 },
+      { id: uid(), platform: 'Instagram', username: 'example_user', password: 'ig_pass_2024', linkedUrl: 'https://instagram.com/example', note: 'Akun IG utama', createdAt: now - 8640000 * 5 },
+    ],
+    unusedLinks: [
+      { id: uid(), name: 'Instagram', url: 'https://instagram.com/old_account', category: 'Media Sosial', note: 'Akun lama tidak aktif', movedAt: now - 8640000 * 3 },
+    ]
+  };
+  saveDB(d);
+}
+
+function uid() {
+  return Math.random().toString(36).slice(2,10) + Date.now().toString(36);
+}
+
+// ===================== LOGIN LOGIC =====================
+let loginAttempts = 0;
+let lockoutUntil = 0;
+let lockoutTimer = null;
+let editTarget = { type: null, id: null };
+let moveTargetId = null;
+let deleteTarget = { type: null, id: null };
+
+function handleLogin(e) {
+  e.preventDefault();
+  const now = Date.now();
+  if (lockoutUntil > now) return false;
+
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const remember = document.getElementById('rememberMe').checked;
+  const warn = document.getElementById('loginWarning');
+
+  const auth = getAuth() || { username: 'admin', passwordHash: DEFAULT_HASH };
+
+  if (user === auth.username && hashPassword(pass) === auth.passwordHash) {
+    loginAttempts = 0;
+    if (remember) {
+      sessionStorage.setItem('ldSession', JSON.stringify({ username: user, time: Date.now() }));
+    } else {
+      sessionStorage.setItem('ldSession', JSON.stringify({ username: user, time: Date.now() }));
     }
-    h^=(h>>>13);
-    h=Math.imul(h,0x5bd1e995)>>>0;
-  }
-  return h.toString(16).padStart(8,'0');
-}
-
-function togglePw(inputId,btn){
-  const inp=document.getElementById(inputId);
-  const shown=inp.type==='text';
-  inp.type=shown?'password':'text';
-  btn.innerHTML=shown
-    ?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>'
-    :'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
-}
-
-// ============================================================
-// SECTION: DATA / LOCALSTORAGE
-// ============================================================
-const STORE_KEY='linkDashboardData';
-const AUTH_KEY='linkDashboardAuth';
-
-function loadData(){
-  try{return JSON.parse(localStorage.getItem(STORE_KEY))||{active:[],login:[],unused:[]};}
-  catch(e){return{active:[],login:[],unused:[]};}
-}
-function saveData(d){localStorage.setItem(STORE_KEY,JSON.stringify(d));}
-function loadAuth(){
-  try{return JSON.parse(localStorage.getItem(AUTH_KEY))||{username:'admin',hash:fnvHash('admin123'),failCount:0,lockedUntil:0};}
-  catch(e){return{username:'admin',hash:fnvHash('admin123'),failCount:0,lockedUntil:0};}
-}
-function saveAuth(a){localStorage.setItem(AUTH_KEY,JSON.stringify(a));}
-
-// Seed dummy data if empty
-function seedData(){
-  const d=loadData();
-  if(d.active.length===0&&d.login.length===0&&d.unused.length===0){
-    d.active.push({id:uid(),name:'Instagram',url:'https://instagram.com/myprofile',cat:'Social Media',note:'Akun utama brand',createdAt:Date.now()-86400000*5,updatedAt:null});
-    d.login.push({id:uid(),name:'Linktree',cat:'Link Bio',url:'https://linktr.ee',username:'myadmin@email.com',password:'P@ssw0rd!23',linked:'',note:'Platform link bio utama',createdAt:Date.now()-86400000*3,updatedAt:null});
-    d.unused.push({id:uid(),name:'Carrd.co',url:'https://carrd.co/mysite',cat:'Portfolio',note:'Sudah diganti dengan versi baru',createdAt:Date.now()-86400000*10,movedAt:Date.now()-86400000*1,updatedAt:null});
-    saveData(d);
-  }
-}
-
-// ============================================================
-// SECTION: AUTH STATE
-// ============================================================
-let currentUser='';
-let sidebarOpen=false;
-
-function checkSession(){
-  const s=sessionStorage.getItem('lv_session')||localStorage.getItem('lv_session_persist');
-  if(s){
-    currentUser=s;
-    return true;
+    warn.classList.add('hidden');
+    doLoginTransition(user, auth);
+  } else {
+    loginAttempts++;
+    const left = 5 - loginAttempts;
+    if (loginAttempts >= 5) {
+      lockoutUntil = Date.now() + 60000;
+      startLockoutTimer();
+    } else {
+      warn.textContent = `Username atau password salah. Sisa percobaan: ${left}`;
+      warn.classList.remove('hidden');
+    }
+    const card = document.getElementById('loginCard');
+    card.classList.remove('shake');
+    void card.offsetWidth;
+    card.classList.add('shake');
+    card.addEventListener('animationend', () => card.classList.remove('shake'), { once: true });
   }
   return false;
 }
 
-// ============================================================
-// SECTION: LOGIN
-// ============================================================
-let loginAttempts=0;
-
-function doLogin(){
-  const auth=loadAuth();
-  const now=Date.now();
-  if(auth.lockedUntil&&now<auth.lockedUntil){
-    const sec=Math.ceil((auth.lockedUntil-now)/1000);
-    showLockout(sec);
-    return;
-  }
-  const u=document.getElementById('loginUser').value.trim();
-  const p=document.getElementById('loginPass').value;
-  if(!u||!p){showLoginError('Username dan password harus diisi.');shakeCard();return;}
-  const hashed=fnvHash(p);
-  if(u===auth.username&&hashed===auth.hash){
-    auth.failCount=0;auth.lockedUntil=0;saveAuth(auth);
-    const remember=document.getElementById('rememberMe').checked;
-    if(remember)localStorage.setItem('lv_session_persist',u);
-    else sessionStorage.setItem('lv_session',u);
-    currentUser=u;
-    hideLoginError();
-    document.getElementById('loginPage').style.opacity='0';
-    document.getElementById('loginPage').style.transition='opacity .3s ease';
-    setTimeout(()=>{
-      document.getElementById('loginPage').style.display='none';
-      showMain();
-    },300);
-  } else {
-    auth.failCount=(auth.failCount||0)+1;
-    if(auth.failCount>=5){
-      auth.lockedUntil=Date.now()+60000;
-      auth.failCount=0;
-      saveAuth(auth);
-      showLockout(60);
-    } else {
-      saveAuth(auth);
-      showLoginError('Username atau password salah. ('+(5-auth.failCount)+' kesempatan tersisa)');
-      shakeCard();
+function startLockoutTimer() {
+  const notice = document.getElementById('lockoutNotice');
+  const warn = document.getElementById('loginWarning');
+  warn.classList.add('hidden');
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+  function tick() {
+    const rem = Math.ceil((lockoutUntil - Date.now()) / 1000);
+    if (rem <= 0) {
+      notice.classList.add('hidden');
+      notice.textContent = '';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      loginAttempts = 0;
+      return;
     }
+    notice.classList.remove('hidden');
+    notice.textContent = `Terlalu banyak percobaan. Coba lagi dalam ${rem} detik.`;
+    setTimeout(tick, 1000);
   }
+  tick();
 }
-function shakeCard(){const c=document.getElementById('loginCard');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');}
-function showLoginError(msg){const el=document.getElementById('loginAlert');el.textContent=msg;el.style.display='block';}
-function hideLoginError(){document.getElementById('loginAlert').style.display='none';}
-function showLockout(sec){
-  const el=document.getElementById('lockoutBanner');
-  el.style.display='block';
-  el.textContent='Terlalu banyak percobaan gagal. Tunggu '+sec+' detik.';
-  if(window._lockTimer)clearInterval(window._lockTimer);
-  let s=sec;
-  window._lockTimer=setInterval(()=>{
-    s--;
-    if(s<=0){clearInterval(window._lockTimer);el.style.display='none';}
-    else{el.textContent='Terlalu banyak percobaan gagal. Tunggu '+s+' detik.';}
-  },1000);
+
+function doLoginTransition(username, auth) {
+  const lp = document.getElementById('loginPage');
+  lp.classList.add('page-exit');
+  setTimeout(() => {
+    lp.classList.add('hidden');
+    lp.classList.remove('page-exit');
+    initDashboard(username, auth);
+  }, 250);
 }
-document.getElementById('loginPass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
-document.getElementById('loginUser').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('loginPass').focus();});
 
-// ============================================================
-// SECTION: MAIN PAGE INIT
-// ============================================================
-let currentMenu='active';
+function initDashboard(username, auth) {
+  const dp = document.getElementById('dashboardPage');
+  dp.classList.remove('hidden');
+  setTimeout(() => dp.classList.add('page-enter'), 10);
 
-function showMain(){
-  document.getElementById('mainPage').style.display='flex';
-  document.getElementById('mainPage').style.flexDirection='column';
-  document.getElementById('mainPage').style.minHeight='100vh';
-  // responsive
-  setupResponsive();
-  // default creds badge
-  const auth=loadAuth();
-  if(auth.hash===fnvHash('admin123')){
-    document.getElementById('defaultCredsBadge').style.display='block';
+  document.getElementById('sidebarUsername').textContent = username;
+  document.getElementById('topbarUsername').textContent = username;
+  const av = username.charAt(0).toUpperCase();
+  document.getElementById('sidebarAvatarText').textContent = av;
+  document.getElementById('topbarAvatarText').textContent = av;
+
+  // Default creds warning
+  if (auth.passwordHash === DEFAULT_HASH) {
+    document.getElementById('defaultCredsWarn').classList.remove('hidden');
+    document.getElementById('defaultCredsWarn').classList.add('flex');
   }
-  // avatar
-  const initials=currentUser.slice(0,2).toUpperCase();
-  document.getElementById('topbarAvatar').textContent=initials;
-  document.getElementById('topbarUsername').textContent=currentUser;
-  document.getElementById('topbarName').style.display='block';
+
+  initDB();
+  updateBadges();
+  renderActive();
   switchMenu('active');
 }
 
-function setupResponsive(){
-  const hamburger=document.getElementById('hamburger');
-  function check(){
-    if(window.innerWidth<=768){hamburger.style.display='block';}
-    else{hamburger.style.display='none';document.getElementById('sidebar').classList.remove('hidden-mobile');document.getElementById('sidebarOverlay').classList.remove('visible');}
+function handleLogout() {
+  sessionStorage.removeItem('ldSession');
+  const dp = document.getElementById('dashboardPage');
+  dp.classList.add('page-exit');
+  setTimeout(() => {
+    dp.classList.add('hidden');
+    dp.classList.remove('page-exit');
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('loginPage').classList.add('page-enter');
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    loginAttempts = 0;
+  }, 250);
+}
+
+// ===================== SIDEBAR =====================
+function toggleSidebar(open) {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  if (open) {
+    sb.classList.add('open');
+    ov.classList.add('show');
+  } else {
+    sb.classList.remove('open');
+    ov.classList.remove('show');
   }
-  check();
-  window.addEventListener('resize',check);
-  // initial hide on mobile
-  if(window.innerWidth<=768){document.getElementById('sidebar').classList.add('hidden-mobile');}
 }
 
-function toggleSidebar(){
-  const sb=document.getElementById('sidebar');
-  const ov=document.getElementById('sidebarOverlay');
-  if(sb.classList.contains('hidden-mobile')){sb.classList.remove('hidden-mobile');ov.classList.add('visible');}
-  else{sb.classList.add('hidden-mobile');ov.classList.remove('visible');}
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.add('hidden-mobile');
-  document.getElementById('sidebarOverlay').classList.remove('visible');
-}
-
-function doLogout(){
-  sessionStorage.removeItem('lv_session');
-  localStorage.removeItem('lv_session_persist');
-  location.reload();
-}
-
-// ============================================================
-// SECTION: MENU SWITCHING
-// ============================================================
-const titles={
-  active:{title:'Link Aktif',sub:'Kelola semua link yang sedang aktif digunakan'},
-  login:{title:'Data Login Link Bio',sub:'Kredensial akun platform link bio'},
-  unused:{title:'Link Diarsipkan',sub:'Link yang sudah tidak digunakan'}
+// ===================== MENU SWITCH =====================
+const menuMeta = {
+  active: { title: 'Link Aktif', sub: 'Kelola semua link aktif Anda' },
+  login: { title: 'Data Login Link Bio', sub: 'Simpan & kelola data login platform' },
+  unused: { title: 'Link Tidak Digunakan', sub: 'Arsip link yang sudah tidak aktif' },
 };
 
-function switchMenu(menu){
-  currentMenu=menu;
-  ['active','login','unused'].forEach(m=>{
-    document.getElementById('nav-'+m).classList.toggle('active',m===menu);
+function switchMenu(m) {
+  ['active','login','unused'].forEach(k => {
+    document.getElementById('menu-' + k).classList.add('hidden');
+    document.getElementById('nav-' + k).classList.remove('active');
   });
-  document.getElementById('pageTitle').textContent=titles[menu].title;
-  document.getElementById('pageSubtitle').textContent=titles[menu].sub;
-  if(window.innerWidth<=768)closeSidebar();
-  renderContent();
-  updateBadges();
+  document.getElementById('menu-' + m).classList.remove('hidden');
+  document.getElementById('nav-' + m).classList.add('active');
+  document.getElementById('topbarTitle').textContent = menuMeta[m].title;
+  document.getElementById('topbarSub').textContent = menuMeta[m].sub;
+
+  // Re-apply animation
+  const section = document.getElementById('menu-' + m);
+  section.classList.remove('content-fade');
+  void section.offsetWidth;
+  section.classList.add('content-fade');
+
+  toggleSidebar(false);
+  if (m === 'active') renderActive();
+  if (m === 'login') renderLogin();
+  if (m === 'unused') renderUnused();
 }
 
-function updateBadges(){
-  const d=loadData();
-  document.getElementById('badge-active').textContent=d.active.length;
-  document.getElementById('badge-login').textContent=d.login.length;
-  document.getElementById('badge-unused').textContent=d.unused.length;
+// ===================== BADGES =====================
+function updateBadges() {
+  const d = getDB();
+  if (!d) return;
+  const ba = document.getElementById('badgeActive');
+  const bl = document.getElementById('badgeLogin');
+  const bu = document.getElementById('badgeUnused');
+  ba.textContent = d.activeLinks.length;
+  bl.textContent = d.loginData.length;
+  bu.textContent = d.unusedLinks.length;
+  ba.classList.add('count-pulse');
+  setTimeout(() => ba.classList.remove('count-pulse'), 400);
 }
 
-// ============================================================
-// SECTION: RENDER CONTENT
-// ============================================================
-function renderContent(){
-  const area=document.getElementById('contentArea');
-  area.className='content-fade';
-  void area.offsetWidth;
-  if(currentMenu==='active')area.innerHTML=renderActive();
-  else if(currentMenu==='login')area.innerHTML=renderLogin();
-  else area.innerHTML=renderUnused();
-}
-
-// ---- SVG Icons ----
-const iconEdit=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
-const iconTrash=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>`;
-const iconMove=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>`;
-const iconRestore=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95L1 10"/></svg>`;
-const iconEye=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>`;
-const iconEyeOff=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
-const iconLink=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
-
-function updatedLabel(item){
-  if(!item.updatedAt||item.updatedAt<=item.createdAt)return'';
-  return`<p class="updated-label">Diperbarui: ${fmtDate(item.updatedAt)}</p>`;
-}
-
-// ---- RENDER ACTIVE ----
-function renderActive(){
-  const d=loadData();
-  const items=d.active;
-  return`
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem;">
-    <div style="display:flex;align-items:center;gap:.75rem;flex:1;min-width:200px;">
-      <input id="searchActive" class="input-field" type="text" placeholder="Cari link aktif..." style="max-width:280px;" oninput="filterActive()" value="${esc(window._searchActive||'')}"/>
-    </div>
-    <button onclick="openAddActive()" class="btn-primary" style="display:flex;align-items:center;gap:.45rem;flex-shrink:0;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Tambah Link
-    </button>
-  </div>
-  <div id="activeList">
-    ${renderActiveList(items,window._searchActive||'')}
-  </div>`;
-}
-
-function renderActiveList(items,search){
-  const q=(search||'').toLowerCase();
-  const filtered=q?items.filter(i=>i.name.toLowerCase().includes(q)||i.url.toLowerCase().includes(q)||(i.cat||'').toLowerCase().includes(q)):items;
-  if(filtered.length===0)return`<div style="text-align:center;padding:3rem 1rem;color:var(--muted);font-size:.875rem;">${q?'Tidak ada hasil untuk "'+esc(q)+'"':'Belum ada link aktif. Klik "+ Tambah Link" untuk menambah.'}</div>`;
-  return filtered.map(item=>`
-    <div class="card" style="margin-bottom:.85rem;">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;">
-        <div style="flex:1;min-width:0;">
-          <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.35rem;">
-            <h3 style="font-size:.9rem;font-weight:700;color:#e2e2f0;">${esc(item.name)}</h3>
-            ${item.cat?`<span class="tag" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.2);">${esc(item.cat)}</span>`:''}
+// ===================== RENDER ACTIVE =====================
+function renderActive() {
+  const d = getDB(); if (!d) return;
+  const q = (document.getElementById('searchActive').value || '').toLowerCase();
+  const list = d.activeLinks.filter(l =>
+    l.name.toLowerCase().includes(q) ||
+    (l.url || '').toLowerCase().includes(q) ||
+    (l.category || '').toLowerCase().includes(q)
+  );
+  const container = document.getElementById('listActive');
+  const empty = document.getElementById('emptyActive');
+  if (!list.length) {
+    container.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  container.innerHTML = list.map(l => {
+    const dotColor = platformDot(l.name);
+    const updatedHtml = l.updatedAt
+      ? `<span class="updated-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Diperbarui: ${fmtDate(l.updatedAt)}</span>` : '';
+    return `
+    <div class="link-card content-fade" data-id="${l.id}">
+      <div class="flex items-start gap-3">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1 flex-wrap">
+            <span style="width:12px;height:12px;border-radius:50%;background:${dotColor};display:inline-block;box-shadow:0 0 0 2px rgba(255,255,255,0.08);flex-shrink:0;"></span>
+            <span class="font-bold text-white text-base">${esc(l.name)}</span>
+            ${catBadge(l.category || 'Lainnya')}
+            ${updatedHtml}
           </div>
-          <a href="${esc(item.url)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.35rem;font-size:.78rem;color:#818cf8;text-decoration:none;word-break:break-all;" onmouseover="this.style.color='#a5b4fc'" onmouseout="this.style.color='#818cf8'">${iconLink}${esc(item.url)}</a>
-          ${item.note?`<p style="font-size:.78rem;color:#9ca3af;margin-top:.4rem;">${esc(item.note)}</p>`:''}
-          ${updatedLabel(item)}
-          <p style="font-size:.7rem;color:#4b4b6a;margin-top:.4rem;">Dibuat: ${fmtDate(item.createdAt)}</p>
+          <a href="${esc(l.url)}" target="_blank" rel="noopener" class="text-xs hover:underline" style="color:#818cf8;word-break:break-all;">${esc(l.url)}</a>
+          ${l.date ? `<div style="font-size:11px;color:var(--muted);margin-top:4px;">Aktif sejak: ${l.date}</div>` : ''}
+          ${l.note ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;padding:8px;background:rgba(99,102,241,0.06);border-radius:8px;border-left:2px solid rgba(99,102,241,0.3);">${esc(l.note)}</div>` : ''}
         </div>
-        <div style="display:flex;align-items:center;gap:.35rem;flex-shrink:0;">
-          <button class="btn-icon btn-icon-edit" onclick="event.stopPropagation();openEditActive('${item.id}')" title="Edit">${iconEdit}</button>
-          <button class="btn-icon btn-icon-move" onclick="event.stopPropagation();confirmMove('${item.id}')" title="Arsipkan">${iconMove}</button>
-          <button class="btn-icon btn-icon-trash" onclick="event.stopPropagation();confirmDeleteActive('${item.id}')" title="Hapus">${iconTrash}</button>
+        <div class="flex items-center gap-1 flex-shrink-0">
+          <div class="tooltip-wrap">
+            <button class="btn-icon" onclick="openEditActive('${l.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+            </button>
+            <span class="tooltip-box">Edit</span>
+          </div>
+          <div class="tooltip-wrap">
+            <button class="btn-icon" onclick="askDelete('active','${l.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+            <span class="tooltip-box">Hapus</span>
+          </div>
+          <div class="tooltip-wrap">
+            <button class="btn-icon" style="color:#fdba74;" onclick="askMove('${l.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+            </button>
+            <span class="tooltip-box">Pindahkan</span>
+          </div>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
-function filterActive(){
-  const q=document.getElementById('searchActive').value;
-  window._searchActive=q;
-  const d=loadData();
-  document.getElementById('activeList').innerHTML=renderActiveList(d.active,q);
-}
-
-// ---- RENDER LOGIN ----
-function renderLogin(){
-  const d=loadData();
-  const items=d.login;
-  return`
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem;">
-    <input id="searchLogin" class="input-field" type="text" placeholder="Cari data login..." style="max-width:280px;flex:1;" oninput="filterLogin()" value="${esc(window._searchLogin||'')}"/>
-    <button onclick="openAddLogin()" class="btn-primary" style="display:flex;align-items:center;gap:.45rem;flex-shrink:0;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Tambah Login
-    </button>
-  </div>
-  <div id="loginList">
-    ${renderLoginList(items,window._searchLogin||'')}
-  </div>`;
-}
-
-function renderLoginList(items,search){
-  const q=(search||'').toLowerCase();
-  const filtered=q?items.filter(i=>i.name.toLowerCase().includes(q)||(i.cat||'').toLowerCase().includes(q)||i.username.toLowerCase().includes(q)):items;
-  if(filtered.length===0)return`<div style="text-align:center;padding:3rem 1rem;color:var(--muted);font-size:.875rem;">${q?'Tidak ada hasil untuk "'+esc(q)+'"':'Belum ada data login.'}</div>`;
-  return filtered.map(item=>`
-    <div class="card" style="margin-bottom:.85rem;">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;">
-        <div style="flex:1;min-width:0;">
-          <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem;">
-            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,rgba(139,92,246,.3),rgba(99,102,241,.2));border:1px solid rgba(139,92,246,.25);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#c4b5fd;">${esc(item.name.slice(0,2).toUpperCase())}</div>
-            <div>
-              <h3 style="font-size:.9rem;font-weight:700;color:#e2e2f0;">${esc(item.name)}</h3>
-              ${item.cat?`<span class="tag" style="background:rgba(139,92,246,.15);color:#c4b5fd;border:1px solid rgba(139,92,246,.2);font-size:.65rem;">${esc(item.cat)}</span>`:''}
-            </div>
+// ===================== RENDER LOGIN =====================
+function renderLogin() {
+  const d = getDB(); if (!d) return;
+  const q = (document.getElementById('searchLogin').value || '').toLowerCase();
+  const list = d.loginData.filter(l =>
+    l.platform.toLowerCase().includes(q) ||
+    (l.username || '').toLowerCase().includes(q)
+  );
+  const container = document.getElementById('listLogin');
+  const empty = document.getElementById('emptyLogin');
+  if (!list.length) { container.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  container.innerHTML = list.map(l => {
+    const updatedHtml = l.updatedAt
+      ? `<span class="updated-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Diperbarui: ${fmtDate(l.updatedAt)}</span>` : '';
+    return `
+    <div class="link-card content-fade" data-id="${l.id}">
+      <div class="flex items-start gap-3">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
+            <span class="font-bold text-white">${esc(l.platform)}</span>
+            ${updatedHtml}
           </div>
-          <div style="display:grid;gap:.35rem;">
-            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;">
-              <span style="color:#6b6b8a;min-width:64px;">URL Login:</span>
-              <a href="${esc(item.url)}" target="_blank" rel="noopener" style="color:#818cf8;text-decoration:none;word-break:break-all;" onmouseover="this.style.color='#a5b4fc'" onmouseout="this.style.color='#818cf8'">${esc(item.url)}</a>
+          <div class="grid gap-2" style="font-size:13px;">
+            <div class="flex items-center gap-2">
+              <span style="color:var(--muted);min-width:80px;">Username:</span>
+              <span style="color:var(--text);">${esc(l.username)}</span>
             </div>
-            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;">
-              <span style="color:#6b6b8a;min-width:64px;">Username:</span>
-              <span style="color:#e2e2f0;">${esc(item.username)}</span>
+            <div class="flex items-center gap-2">
+              <span style="color:var(--muted);min-width:80px;">Password:</span>
+              <span id="pw_${l.id}" style="font-family:monospace;color:var(--text);">••••••••</span>
+              <button class="btn-icon" style="padding:2px;" onclick="toggleCardPw('${l.id}','${esc(l.password)}',this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
             </div>
-            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;">
-              <span style="color:#6b6b8a;min-width:64px;">Password:</span>
-              <span id="pw_${item.id}" style="color:#e2e2f0;font-family:monospace;letter-spacing:.05em;">${'*'.repeat(Math.min(item.password.length,12))}</span>
-              <button class="btn-icon" onclick="toggleCardPw('${item.id}','${esc(item.password)}')" style="width:22px;height:22px;border-color:rgba(99,102,241,.15);color:#818cf8;" title="Tampilkan/Sembunyikan" id="pwbtn_${item.id}">${iconEye}</button>
-            </div>
-            ${item.linked?`<div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="color:#6b6b8a;min-width:64px;">Link terkait:</span><span style="color:#a5b4fc;">${esc(getLinkName(item.linked))}</span></div>`:''}
-            ${item.note?`<p style="font-size:.78rem;color:#9ca3af;margin-top:.2rem;">${esc(item.note)}</p>`:''}
-            ${updatedLabel(item)}
+            ${l.linkedUrl ? `<div class="flex items-center gap-2"><span style="color:var(--muted);min-width:80px;">Link:</span><a href="${esc(l.linkedUrl)}" target="_blank" rel="noopener" style="color:#818cf8;font-size:12px;" class="hover:underline truncate">${esc(l.linkedUrl)}</a></div>` : ''}
           </div>
-          <p style="font-size:.7rem;color:#4b4b6a;margin-top:.5rem;">Dibuat: ${fmtDate(item.createdAt)}</p>
+          ${l.note ? `<div style="font-size:12px;color:var(--muted);margin-top:8px;padding:8px;background:rgba(99,102,241,0.06);border-radius:8px;border-left:2px solid rgba(99,102,241,0.3);">${esc(l.note)}</div>` : ''}
         </div>
-        <div style="display:flex;align-items:center;gap:.35rem;flex-shrink:0;">
-          <button class="btn-icon btn-icon-edit" onclick="event.stopPropagation();openEditLogin('${item.id}')" title="Edit">${iconEdit}</button>
-          <button class="btn-icon btn-icon-trash" onclick="event.stopPropagation();confirmDeleteLogin('${item.id}')" title="Hapus">${iconTrash}</button>
+        <div class="flex items-center gap-1 flex-shrink-0">
+          <div class="tooltip-wrap">
+            <button class="btn-icon" onclick="openEditLogin('${l.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+            </button>
+            <span class="tooltip-box">Edit</span>
+          </div>
+          <div class="tooltip-wrap">
+            <button class="btn-icon" onclick="askDelete('login','${l.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+            <span class="tooltip-box">Hapus</span>
+          </div>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
-function getLinkName(id){
-  const d=loadData();
-  const found=d.active.find(a=>a.id===id);
-  return found?found.name:id;
-}
-
-function toggleCardPw(id,plainPw){
-  const span=document.getElementById('pw_'+id);
-  const btn=document.getElementById('pwbtn_'+id);
-  if(!span||!btn)return;
-  const showing=span.dataset.showing==='1';
-  if(showing){span.textContent='*'.repeat(Math.min(plainPw.length,12));span.dataset.showing='0';btn.innerHTML=iconEye;}
-  else{span.textContent=plainPw;span.dataset.showing='1';btn.innerHTML=iconEyeOff;}
-}
-
-function filterLogin(){
-  const q=document.getElementById('searchLogin').value;
-  window._searchLogin=q;
-  const d=loadData();
-  document.getElementById('loginList').innerHTML=renderLoginList(d.login,q);
-}
-
-// ---- RENDER UNUSED ----
-function renderUnused(){
-  const d=loadData();
-  const items=d.unused;
-  return`
-  <div style="margin-bottom:1.25rem;">
-    <input id="searchUnused" class="input-field" type="text" placeholder="Cari link diarsipkan..." style="max-width:280px;" oninput="filterUnused()" value="${esc(window._searchUnused||'')}"/>
-  </div>
-  <div id="unusedList">
-    ${renderUnusedList(items,window._searchUnused||'')}
-  </div>`;
-}
-
-function renderUnusedList(items,search){
-  const q=(search||'').toLowerCase();
-  const filtered=q?items.filter(i=>i.name.toLowerCase().includes(q)||i.url.toLowerCase().includes(q)||(i.cat||'').toLowerCase().includes(q)):items;
-  if(filtered.length===0)return`<div style="text-align:center;padding:3rem 1rem;color:var(--muted);font-size:.875rem;">${q?'Tidak ada hasil untuk "'+esc(q)+'"':'Belum ada link yang diarsipkan.'}</div>`;
-  return filtered.map(item=>`
-    <div class="card" style="margin-bottom:.85rem;border-color:rgba(107,107,138,.2);">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;">
-        <div style="flex:1;min-width:0;">
-          <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.35rem;">
-            <h3 style="font-size:.9rem;font-weight:700;color:#9ca3af;">${esc(item.name)}</h3>
-            ${item.cat?`<span class="tag" style="background:rgba(107,107,138,.15);color:#9ca3af;border:1px solid rgba(107,107,138,.2);">${esc(item.cat)}</span>`:''}
-            <span class="tag" style="background:rgba(245,158,11,.1);color:#fbbf24;border:1px solid rgba(245,158,11,.2);">Diarsipkan: ${fmtDate(item.movedAt)}</span>
+// ===================== RENDER UNUSED =====================
+function renderUnused() {
+  const d = getDB(); if (!d) return;
+  const q = (document.getElementById('searchUnused').value || '').toLowerCase();
+  const list = d.unusedLinks.filter(l =>
+    l.name.toLowerCase().includes(q) ||
+    (l.url || '').toLowerCase().includes(q) ||
+    (l.category || '').toLowerCase().includes(q)
+  );
+  const container = document.getElementById('listUnused');
+  const empty = document.getElementById('emptyUnused');
+  if (!list.length) { container.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  container.innerHTML = list.map(l => {
+    const dotColor = platformDot(l.name);
+    const updatedHtml = l.updatedAt
+      ? `<span class="updated-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Diperbarui: ${fmtDate(l.updatedAt)}</span>` : '';
+    return `
+    <div class="link-card content-fade" data-id="${l.id}">
+      <div class="flex items-start gap-3">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1 flex-wrap">
+            <span style="width:12px;height:12px;border-radius:50%;background:${dotColor};display:inline-block;box-shadow:0 0 0 2px rgba(255,255,255,0.08);flex-shrink:0;"></span>
+            <span class="font-bold text-white">${esc(l.name)}</span>
+            <span class="badge" style="background:rgba(251,146,60,0.15);color:#fdba74;font-size:10px;">Diarsipkan pada: ${fmtDate(l.movedAt)}</span>
+            ${updatedHtml}
           </div>
-          <a href="${esc(item.url)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.35rem;font-size:.78rem;color:#6b6b8a;text-decoration:none;word-break:break-all;" onmouseover="this.style.color='#9ca3af'" onmouseout="this.style.color='#6b6b8a'">${iconLink}${esc(item.url)}</a>
-          ${item.note?`<p style="font-size:.78rem;color:#6b6b8a;margin-top:.4rem;">${esc(item.note)}</p>`:''}
-          ${updatedLabel(item)}
-          <p style="font-size:.7rem;color:#4b4b6a;margin-top:.4rem;">Dibuat: ${fmtDate(item.createdAt)}</p>
+          ${l.category ? `<div class="mb-1">${catBadge(l.category)}</div>` : ''}
+          ${l.url ? `<a href="${esc(l.url)}" target="_blank" rel="noopener" class="text-xs hover:underline" style="color:#818cf8;word-break:break-all;">${esc(l.url)}</a>` : ''}
+          ${l.note ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;padding:8px;background:rgba(251,146,60,0.06);border-radius:8px;border-left:2px solid rgba(251,146,60,0.3);">${esc(l.note)}</div>` : ''}
         </div>
-        <div style="display:flex;align-items:center;gap:.35rem;flex-shrink:0;">
-          <button class="btn-icon btn-icon-edit" onclick="event.stopPropagation();openEditUnused('${item.id}')" title="Edit">${iconEdit}</button>
-          <button class="btn-icon btn-icon-restore" onclick="event.stopPropagation();confirmRestore('${item.id}')" title="Kembalikan">${iconRestore}</button>
-          <button class="btn-icon btn-icon-trash" onclick="event.stopPropagation();confirmDeleteUnused('${item.id}')" title="Hapus">${iconTrash}</button>
+        <div class="flex items-center gap-1 flex-shrink-0">
+          <div class="tooltip-wrap">
+            <button class="btn-icon" onclick="openEditUnused('${l.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+            </button>
+            <span class="tooltip-box">Edit</span>
+          </div>
+          <div class="tooltip-wrap">
+            <button class="btn-icon" onclick="askDelete('unused','${l.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+            <span class="tooltip-box">Hapus</span>
+          </div>
+          <div class="tooltip-wrap">
+            <button class="btn-icon" style="color:#86efac;" onclick="restoreLink('${l.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+            </button>
+            <span class="tooltip-box">Kembalikan</span>
+          </div>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
-function filterUnused(){
-  const q=document.getElementById('searchUnused').value;
-  window._searchUnused=q;
-  const d=loadData();
-  document.getElementById('unusedList').innerHTML=renderUnusedList(d.unused,q);
+// ===================== PLATFORM DROPDOWN HELPERS =====================
+function handlePlatformChange() {
+  const sel = document.getElementById('al_name');
+  const wrap = document.getElementById('customPlatformWrap');
+  if (sel.value === '__custom__') {
+    wrap.classList.remove('hidden');
+    document.getElementById('al_customName').focus();
+  } else {
+    wrap.classList.add('hidden');
+    document.getElementById('al_customName').value = '';
+  }
+  document.getElementById('nameErr').classList.remove('show');
 }
 
-// ============================================================
-// SECTION: MODAL ACTIVE (ADD + EDIT)
-// ============================================================
-let _activeEditId=null;
-
-function openAddActive(){
-  _activeEditId=null;
-  document.getElementById('modalActiveTitle').textContent='Tambah Link Aktif';
-  document.getElementById('aName').value='';
-  document.getElementById('aUrl').value='';
-  document.getElementById('aCat').value='';
-  document.getElementById('aNote').value='';
-  document.getElementById('modalActiveErr').style.display='none';
-  const btn=document.getElementById('modalActiveBtn');
-  btn.textContent='Simpan';
-  btn.className='btn-primary';
-  btn.onclick=submitActive;
-  document.getElementById('modalActive').style.display='flex';
+function getPlatformValue() {
+  const sel = document.getElementById('al_name');
+  if (sel.value === '__custom__') {
+    return document.getElementById('al_customName').value.trim();
+  }
+  return sel.value;
 }
 
-function openEditActive(id){
-  const d=loadData();
-  const item=d.active.find(i=>i.id===id);
-  if(!item)return;
-  _activeEditId=id;
-  document.getElementById('modalActiveTitle').textContent='Edit Link Aktif';
-  document.getElementById('aName').value=item.name;
-  document.getElementById('aUrl').value=item.url;
-  document.getElementById('aCat').value=item.cat||'';
-  document.getElementById('aNote').value=item.note||'';
-  document.getElementById('modalActiveErr').style.display='none';
-  const btn=document.getElementById('modalActiveBtn');
-  btn.textContent='Simpan Perubahan';
-  btn.className='btn-save-edit';
-  btn.onclick=submitActive;
-  document.getElementById('modalActive').style.display='flex';
+function setPlatformValue(name) {
+  const sel = document.getElementById('al_name');
+  const wrap = document.getElementById('customPlatformWrap');
+  const customInput = document.getElementById('al_customName');
+  if (PLATFORMS.includes(name)) {
+    sel.value = name;
+    wrap.classList.add('hidden');
+    customInput.value = '';
+  } else if (name) {
+    sel.value = '__custom__';
+    wrap.classList.remove('hidden');
+    customInput.value = name;
+  } else {
+    sel.value = '';
+    wrap.classList.add('hidden');
+    customInput.value = '';
+  }
 }
 
-function closeModalActive(e){
-  if(e&&e.target!==document.getElementById('modalActive'))return;
-  document.getElementById('modalActive').style.display='none';
-  _activeEditId=null;
+// ===================== MODAL: ACTIVE =====================
+function openAddActive() {
+  closeAllModals();
+  editTarget = { type: null, id: null };
+  document.getElementById('modalActiveTitle').textContent = 'Tambah Link Aktif';
+  document.getElementById('btnSaveActive').textContent = 'Simpan';
+  resetActiveForm();
+  openModal('active');
 }
 
-function submitActive(){
-  const name=document.getElementById('aName').value.trim();
-  const url=document.getElementById('aUrl').value.trim();
-  const cat=document.getElementById('aCat').value.trim();
-  const note=document.getElementById('aNote').value.trim();
-  const errEl=document.getElementById('modalActiveErr');
-  if(!name||!url){errEl.textContent='Nama dan URL wajib diisi.';errEl.style.display='block';return;}
-  errEl.style.display='none';
-  const d=loadData();
-  if(_activeEditId){
-    // UPDATE
-    const idx=d.active.findIndex(i=>i.id===_activeEditId);
-    if(idx>-1){
-      d.active[idx]={...d.active[idx],name,url,cat,note,updatedAt:Date.now()};
+function openEditActive(id) {
+  const d = getDB();
+  const link = d.activeLinks.find(l => l.id === id);
+  if (!link) return;
+  closeAllModals();
+  editTarget = { type: 'active', id };
+  document.getElementById('modalActiveTitle').textContent = 'Edit Link Aktif';
+  document.getElementById('btnSaveActive').textContent = 'Simpan Perubahan';
+
+  setPlatformValue(link.name);
+  const catSel = document.getElementById('al_category');
+  catSel.value = link.category || '';
+  document.getElementById('al_url').value = link.url || '';
+  document.getElementById('al_date').value = link.date || '';
+  document.getElementById('al_note').value = link.note || '';
+
+  // Clear errors
+  ['nameErr','catErr','urlErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+  openModal('active');
+}
+
+function resetActiveForm() {
+  document.getElementById('al_name').value = '';
+  document.getElementById('customPlatformWrap').classList.add('hidden');
+  document.getElementById('al_customName').value = '';
+  document.getElementById('al_category').value = '';
+  document.getElementById('al_url').value = '';
+  document.getElementById('al_date').value = '';
+  document.getElementById('al_note').value = '';
+  ['nameErr','catErr','urlErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+}
+
+function saveActive() {
+  const nameVal = getPlatformValue();
+  const cat = document.getElementById('al_category').value;
+  const url = document.getElementById('al_url').value.trim();
+  let valid = true;
+
+  if (!nameVal) {
+    document.getElementById('nameErr').classList.add('show');
+    valid = false;
+  } else {
+    document.getElementById('nameErr').classList.remove('show');
+  }
+  if (!cat) {
+    document.getElementById('catErr').classList.add('show');
+    valid = false;
+  } else {
+    document.getElementById('catErr').classList.remove('show');
+  }
+  if (!url) {
+    document.getElementById('urlErr').classList.add('show');
+    valid = false;
+  } else {
+    document.getElementById('urlErr').classList.remove('show');
+  }
+  if (!valid) return;
+
+  const d = getDB();
+  const date = document.getElementById('al_date').value;
+  const note = document.getElementById('al_note').value.trim();
+
+  if (editTarget.type === 'active' && editTarget.id) {
+    // Update
+    const idx = d.activeLinks.findIndex(l => l.id === editTarget.id);
+    if (idx > -1) {
+      d.activeLinks[idx] = {
+        ...d.activeLinks[idx],
+        name: nameVal,
+        category: cat,
+        url,
+        date,
+        note,
+        updatedAt: Date.now()
+      };
     }
   } else {
-    // ADD
-    d.active.unshift({id:uid(),name,url,cat,note,createdAt:Date.now(),updatedAt:null});
+    // Add
+    d.activeLinks.unshift({ id: uid(), name: nameVal, category: cat, url, date, note, createdAt: Date.now() });
   }
-  saveData(d);
-  document.getElementById('modalActive').style.display='none';
-  _activeEditId=null;
-  renderContent();
+  saveDB(d);
+  closeModal('active');
   updateBadges();
+  renderActive();
 }
 
-// ============================================================
-// SECTION: MODAL LOGIN (ADD + EDIT)
-// ============================================================
-let _loginEditId=null;
-
-function openAddLogin(){
-  _loginEditId=null;
-  document.getElementById('modalLoginTitle').textContent='Tambah Data Login';
-  document.getElementById('lName').value='';
-  document.getElementById('lCat').value='';
-  document.getElementById('lUrl').value='';
-  document.getElementById('lUser').value='';
-  document.getElementById('lPass').value='';
-  document.getElementById('lPass').type='password';
-  document.getElementById('lNote').value='';
-  document.getElementById('modalLoginErr').style.display='none';
-  const btn=document.getElementById('modalLoginBtn');
-  btn.textContent='Simpan';
-  btn.className='btn-primary';
-  populateLinkedDropdown('');
-  document.getElementById('modalLogin').style.display='flex';
-}
-
-function openEditLogin(id){
-  const d=loadData();
-  const item=d.login.find(i=>i.id===id);
-  if(!item)return;
-  _loginEditId=id;
-  document.getElementById('modalLoginTitle').textContent='Edit Data Login';
-  document.getElementById('lName').value=item.name;
-  document.getElementById('lCat').value=item.cat||'';
-  document.getElementById('lUrl').value=item.url;
-  document.getElementById('lUser').value=item.username;
-  document.getElementById('lPass').value=item.password;
-  document.getElementById('lPass').type='password';
-  document.getElementById('lNote').value=item.note||'';
-  document.getElementById('modalLoginErr').style.display='none';
-  const btn=document.getElementById('modalLoginBtn');
-  btn.textContent='Simpan Perubahan';
-  btn.className='btn-save-edit';
-  populateLinkedDropdown(item.linked||'');
-  document.getElementById('modalLogin').style.display='flex';
-}
-
-function closeModalLogin(e){
-  if(e&&e.target!==document.getElementById('modalLogin'))return;
-  document.getElementById('modalLogin').style.display='none';
-  _loginEditId=null;
-}
-
-function populateLinkedDropdown(selectedId){
-  const d=loadData();
-  const sel=document.getElementById('lLinked');
-  sel.innerHTML='<option value="">-- Tidak ada --</option>';
-  d.active.forEach(a=>{
-    const opt=document.createElement('option');
-    opt.value=a.id;opt.textContent=a.name;
-    if(a.id===selectedId)opt.selected=true;
+// ===================== MODAL: LOGIN =====================
+function populateLoginLinkDropdown(selectedUrl) {
+  const d = getDB();
+  const sel = document.getElementById('ll_link');
+  sel.innerHTML = '<option value="">-- Pilih Link (Opsional) --</option>';
+  d.activeLinks.forEach(l => {
+    const opt = document.createElement('option');
+    opt.value = l.url;
+    opt.textContent = l.name + ' - ' + l.url;
+    if (l.url === selectedUrl) opt.selected = true;
     sel.appendChild(opt);
   });
 }
 
-function submitLogin(){
-  const name=document.getElementById('lName').value.trim();
-  const cat=document.getElementById('lCat').value.trim();
-  const url=document.getElementById('lUrl').value.trim();
-  const username=document.getElementById('lUser').value.trim();
-  const password=document.getElementById('lPass').value;
-  const linked=document.getElementById('lLinked').value;
-  const note=document.getElementById('lNote').value.trim();
-  const errEl=document.getElementById('modalLoginErr');
-  if(!name||!url||!username||!password){errEl.textContent='Nama, URL, Username, dan Password wajib diisi.';errEl.style.display='block';return;}
-  errEl.style.display='none';
-  const d=loadData();
-  if(_loginEditId){
-    const idx=d.login.findIndex(i=>i.id===_loginEditId);
-    if(idx>-1){
-      d.login[idx]={...d.login[idx],name,cat,url,username,password,linked,note,updatedAt:Date.now()};
+function openAddLogin() {
+  closeAllModals();
+  editTarget = { type: null, id: null };
+  document.getElementById('modalLoginTitle').textContent = 'Tambah Data Login';
+  document.getElementById('btnSaveLogin').textContent = 'Simpan';
+  document.getElementById('ll_platform').value = '';
+  document.getElementById('ll_user').value = '';
+  document.getElementById('ll_pass').value = '';
+  document.getElementById('ll_note').value = '';
+  populateLoginLinkDropdown('');
+  ['llPlatformErr','llUserErr','llPassErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+  openModal('login');
+}
+
+function openEditLogin(id) {
+  const d = getDB();
+  const item = d.loginData.find(l => l.id === id);
+  if (!item) return;
+  closeAllModals();
+  editTarget = { type: 'login', id };
+  document.getElementById('modalLoginTitle').textContent = 'Edit Data Login';
+  document.getElementById('btnSaveLogin').textContent = 'Simpan Perubahan';
+  document.getElementById('ll_platform').value = item.platform || '';
+  document.getElementById('ll_user').value = item.username || '';
+  document.getElementById('ll_pass').value = item.password || '';
+  document.getElementById('ll_note').value = item.note || '';
+  populateLoginLinkDropdown(item.linkedUrl || '');
+  ['llPlatformErr','llUserErr','llPassErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+  openModal('login');
+}
+
+function saveLogin() {
+  const platform = document.getElementById('ll_platform').value.trim();
+  const username = document.getElementById('ll_user').value.trim();
+  const password = document.getElementById('ll_pass').value.trim();
+  let valid = true;
+  if (!platform) { document.getElementById('llPlatformErr').classList.add('show'); valid = false; }
+  else document.getElementById('llPlatformErr').classList.remove('show');
+  if (!username) { document.getElementById('llUserErr').classList.add('show'); valid = false; }
+  else document.getElementById('llUserErr').classList.remove('show');
+  if (!password) { document.getElementById('llPassErr').classList.add('show'); valid = false; }
+  else document.getElementById('llPassErr').classList.remove('show');
+  if (!valid) return;
+
+  const d = getDB();
+  const linkedUrl = document.getElementById('ll_link').value;
+  const note = document.getElementById('ll_note').value.trim();
+
+  if (editTarget.type === 'login' && editTarget.id) {
+    const idx = d.loginData.findIndex(l => l.id === editTarget.id);
+    if (idx > -1) {
+      d.loginData[idx] = { ...d.loginData[idx], platform, username, password, linkedUrl, note, updatedAt: Date.now() };
     }
   } else {
-    d.login.unshift({id:uid(),name,cat,url,username,password,linked,note,createdAt:Date.now(),updatedAt:null});
+    d.loginData.unshift({ id: uid(), platform, username, password, linkedUrl, note, createdAt: Date.now() });
   }
-  saveData(d);
-  document.getElementById('modalLogin').style.display='none';
-  _loginEditId=null;
-  renderContent();
+  saveDB(d);
+  closeModal('login');
   updateBadges();
+  renderLogin();
 }
 
-// ============================================================
-// SECTION: MODAL UNUSED (EDIT ONLY)
-// ============================================================
-let _unusedEditId=null;
-
-function openEditUnused(id){
-  const d=loadData();
-  const item=d.unused.find(i=>i.id===id);
-  if(!item)return;
-  _unusedEditId=id;
-  document.getElementById('modalUnusedTitle').textContent='Edit Link Diarsipkan';
-  document.getElementById('uName').value=item.name;
-  document.getElementById('uUrl').value=item.url;
-  document.getElementById('uCat').value=item.cat||'';
-  document.getElementById('uNote').value=item.note||'';
-  document.getElementById('modalUnusedErr').style.display='none';
-  document.getElementById('modalUnused').style.display='flex';
+// ===================== MODAL: UNUSED =====================
+function openEditUnused(id) {
+  const d = getDB();
+  const item = d.unusedLinks.find(l => l.id === id);
+  if (!item) return;
+  closeAllModals();
+  editTarget = { type: 'unused', id };
+  document.getElementById('modalUnusedTitle').textContent = 'Edit Link Arsip';
+  document.getElementById('ul_name').value = item.name || '';
+  document.getElementById('ul_category').value = item.category || '';
+  document.getElementById('ul_url').value = item.url || '';
+  document.getElementById('ul_note').value = item.note || '';
+  document.getElementById('ulNameErr').classList.remove('show');
+  openModal('unused');
 }
 
-function closeModalUnused(e){
-  if(e&&e.target!==document.getElementById('modalUnused'))return;
-  document.getElementById('modalUnused').style.display='none';
-  _unusedEditId=null;
-}
+function saveUnused() {
+  const name = document.getElementById('ul_name').value.trim();
+  if (!name) { document.getElementById('ulNameErr').classList.add('show'); return; }
+  document.getElementById('ulNameErr').classList.remove('show');
 
-function submitUnused(){
-  const name=document.getElementById('uName').value.trim();
-  const url=document.getElementById('uUrl').value.trim();
-  const cat=document.getElementById('uCat').value.trim();
-  const note=document.getElementById('uNote').value.trim();
-  const errEl=document.getElementById('modalUnusedErr');
-  if(!name||!url){errEl.textContent='Nama dan URL wajib diisi.';errEl.style.display='block';return;}
-  errEl.style.display='none';
-  const d=loadData();
-  if(_unusedEditId){
-    const idx=d.unused.findIndex(i=>i.id===_unusedEditId);
-    if(idx>-1){
-      d.unused[idx]={...d.unused[idx],name,url,cat,note,updatedAt:Date.now()};
-    }
+  const d = getDB();
+  const idx = d.unusedLinks.findIndex(l => l.id === editTarget.id);
+  if (idx > -1) {
+    d.unusedLinks[idx] = {
+      ...d.unusedLinks[idx],
+      name,
+      category: document.getElementById('ul_category').value.trim(),
+      url: document.getElementById('ul_url').value.trim(),
+      note: document.getElementById('ul_note').value.trim(),
+      updatedAt: Date.now()
+    };
   }
-  saveData(d);
-  document.getElementById('modalUnused').style.display='none';
-  _unusedEditId=null;
-  renderContent();
-  updateBadges();
+  saveDB(d);
+  closeModal('unused');
+  renderUnused();
 }
 
-// ============================================================
-// SECTION: CONFIRM MODAL
-// ============================================================
-let _confirmCb=null;
-
-function showConfirm({icon,iconBg,iconColor,title,msg,okLabel,okBg,cb}){
-  const el=document.getElementById('modalConfirm');
-  const iconEl=document.getElementById('confirmIcon');
-  iconEl.innerHTML=icon;
-  iconEl.style.background=iconBg;
-  iconEl.style.color=iconColor;
-  document.getElementById('confirmTitle').textContent=title;
-  document.getElementById('confirmMsg').textContent=msg;
-  const okBtn=document.getElementById('confirmOkBtn');
-  okBtn.textContent=okLabel;
-  okBtn.style.background=okBg;
-  _confirmCb=cb;
-  okBtn.onclick=()=>{if(_confirmCb)_confirmCb();closeConfirm();};
-  el.style.display='flex';
-}
-function closeConfirm(){document.getElementById('modalConfirm').style.display='none';_confirmCb=null;}
-
-// ---- CONFIRM DELETE ACTIVE ----
-function confirmDeleteActive(id){
-  showConfirm({
-    icon:iconTrash,iconBg:'rgba(239,68,68,.15)',iconColor:'#f87171',
-    title:'Hapus Link Aktif?',
-    msg:'Link ini akan dihapus permanen dan tidak bisa dikembalikan.',
-    okLabel:'Hapus',okBg:'linear-gradient(135deg,#ef4444,#dc2626)',
-    cb:()=>{
-      const d=loadData();
-      d.active=d.active.filter(i=>i.id!==id);
-      saveData(d);renderContent();updateBadges();
-    }
-  });
-}
-// ---- CONFIRM DELETE LOGIN ----
-function confirmDeleteLogin(id){
-  showConfirm({
-    icon:iconTrash,iconBg:'rgba(239,68,68,.15)',iconColor:'#f87171',
-    title:'Hapus Data Login?',
-    msg:'Kredensial ini akan dihapus permanen.',
-    okLabel:'Hapus',okBg:'linear-gradient(135deg,#ef4444,#dc2626)',
-    cb:()=>{
-      const d=loadData();
-      d.login=d.login.filter(i=>i.id!==id);
-      saveData(d);renderContent();updateBadges();
-    }
-  });
-}
-// ---- CONFIRM DELETE UNUSED ----
-function confirmDeleteUnused(id){
-  showConfirm({
-    icon:iconTrash,iconBg:'rgba(239,68,68,.15)',iconColor:'#f87171',
-    title:'Hapus Permanen?',
-    msg:'Link yang diarsipkan ini akan dihapus secara permanen.',
-    okLabel:'Hapus',okBg:'linear-gradient(135deg,#ef4444,#dc2626)',
-    cb:()=>{
-      const d=loadData();
-      d.unused=d.unused.filter(i=>i.id!==id);
-      saveData(d);renderContent();updateBadges();
-    }
-  });
-}
-// ---- CONFIRM MOVE ----
-function confirmMove(id){
-  const d=loadData();
-  const item=d.active.find(i=>i.id===id);
-  if(!item)return;
-  showConfirm({
-    icon:iconMove,iconBg:'rgba(245,158,11,.12)',iconColor:'#fbbf24',
-    title:'Arsipkan Link?',
-    msg:`"${item.name}" akan dipindahkan ke daftar link diarsipkan.`,
-    okLabel:'Arsipkan',okBg:'linear-gradient(135deg,#f59e0b,#d97706)',
-    cb:()=>{
-      const d2=loadData();
-      const idx=d2.active.findIndex(i=>i.id===id);
-      if(idx>-1){
-        const [moved]=d2.active.splice(idx,1);
-        moved.movedAt=Date.now();
-        d2.unused.unshift(moved);
-        saveData(d2);renderContent();updateBadges();
-      }
-    }
-  });
-}
-// ---- CONFIRM RESTORE ----
-function confirmRestore(id){
-  const d=loadData();
-  const item=d.unused.find(i=>i.id===id);
-  if(!item)return;
-  showConfirm({
-    icon:iconRestore,iconBg:'rgba(34,197,94,.12)',iconColor:'#4ade80',
-    title:'Kembalikan Link?',
-    msg:`"${item.name}" akan dipindahkan kembali ke daftar Link Aktif.`,
-    okLabel:'Kembalikan',okBg:'linear-gradient(135deg,#22c55e,#16a34a)',
-    cb:()=>{
-      const d2=loadData();
-      const idx=d2.unused.findIndex(i=>i.id===id);
-      if(idx>-1){
-        const [restored]=d2.unused.splice(idx,1);
-        delete restored.movedAt;
-        d2.active.unshift(restored);
-        saveData(d2);switchMenu('active');updateBadges();
-      }
-    }
-  });
+// ===================== MOVE & RESTORE =====================
+function askMove(id) {
+  moveTargetId = id;
+  openModal('confirm');
 }
 
-// ============================================================
-// SECTION: KEYBOARD SHORTCUTS
-// ============================================================
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){
-    if(document.getElementById('modalActive').style.display==='flex'){closeModalActive();return;}
-    if(document.getElementById('modalLogin').style.display==='flex'){closeModalLogin();return;}
-    if(document.getElementById('modalUnused').style.display==='flex'){closeModalUnused();return;}
-    if(document.getElementById('modalConfirm').style.display==='flex'){closeConfirm();return;}
+function confirmMove() {
+  const d = getDB();
+  const idx = d.activeLinks.findIndex(l => l.id === moveTargetId);
+  if (idx > -1) {
+    const link = d.activeLinks.splice(idx, 1)[0];
+    link.movedAt = Date.now();
+    delete link.updatedAt;
+    d.unusedLinks.unshift(link);
+    saveDB(d);
+    updateBadges();
+    renderActive();
   }
+  closeModal('confirm');
+  moveTargetId = null;
+}
+
+function restoreLink(id) {
+  const d = getDB();
+  const idx = d.unusedLinks.findIndex(l => l.id === id);
+  if (idx > -1) {
+    const link = d.unusedLinks.splice(idx, 1)[0];
+    delete link.movedAt;
+    link.createdAt = link.createdAt || Date.now();
+    d.activeLinks.unshift(link);
+    saveDB(d);
+    updateBadges();
+    renderUnused();
+    renderActive();
+  }
+}
+
+// ===================== DELETE =====================
+function askDelete(type, id) {
+  deleteTarget = { type, id };
+  openModal('delete');
+}
+
+function confirmDelete() {
+  const d = getDB();
+  if (deleteTarget.type === 'active') {
+    d.activeLinks = d.activeLinks.filter(l => l.id !== deleteTarget.id);
+    saveDB(d); updateBadges(); renderActive();
+  } else if (deleteTarget.type === 'login') {
+    d.loginData = d.loginData.filter(l => l.id !== deleteTarget.id);
+    saveDB(d); updateBadges(); renderLogin();
+  } else if (deleteTarget.type === 'unused') {
+    d.unusedLinks = d.unusedLinks.filter(l => l.id !== deleteTarget.id);
+    saveDB(d); updateBadges(); renderUnused();
+  }
+  closeModal('delete');
+  deleteTarget = { type: null, id: null };
+}
+
+// ===================== MODAL OPEN/CLOSE =====================
+function openModal(name) {
+  const el = document.getElementById('modal' + cap(name));
+  if (!el) return;
+  el.classList.remove('hidden');
+  el.classList.add('flex');
+  // Re-trigger animation
+  const inner = el.querySelector('[class*="modal-enter"], .modal-enter, [id$="Inner"]') || el.querySelector('div');
+  if (inner) { inner.classList.remove('modal-enter'); void inner.offsetWidth; inner.classList.add('modal-enter'); }
+}
+
+function closeModal(name) {
+  const el = document.getElementById('modal' + cap(name));
+  if (!el) return;
+  el.classList.add('hidden');
+  el.classList.remove('flex');
+  if (name === 'active') {
+    resetActiveForm();
+    document.getElementById('modalActiveTitle').textContent = 'Tambah Link Aktif';
+    document.getElementById('btnSaveActive').textContent = 'Simpan';
+    editTarget = { type: null, id: null };
+  }
+  if (name === 'login') editTarget = { type: null, id: null };
+  if (name === 'unused') editTarget = { type: null, id: null };
+}
+
+function closeAllModals() {
+  ['active','login','unused','confirm','delete'].forEach(n => closeModal(n));
+}
+
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// Close modal on backdrop click
+['modalActive','modalLogin','modalUnused','modalConfirm','modalDelete'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('click', function(e) {
+    if (e.target === this) closeModal(id.replace('modal','').toLowerCase());
+  });
 });
 
-// ============================================================
-// SECTION: INIT
-// ============================================================
-(function init(){
-  seedData();
-  if(checkSession()){
-    document.getElementById('loginPage').style.display='none';
-    showMain();
+// ===================== UTILITIES =====================
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtDate(ts) {
+  if (!ts) return '-';
+  const d = new Date(ts);
+  return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function togglePw(fieldId, btn) {
+  const f = document.getElementById(fieldId);
+  const showing = f.type === 'text';
+  f.type = showing ? 'password' : 'text';
+  btn.innerHTML = showing
+    ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+    : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+}
+
+function toggleCardPw(id, pass, btn) {
+  const el = document.getElementById('pw_' + id);
+  if (!el) return;
+  const showing = el.textContent !== '••••••••';
+  el.textContent = showing ? '••••••••' : pass;
+  btn.innerHTML = showing
+    ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+    : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+}
+
+// ===================== AUTO-LOGIN CHECK =====================
+(function checkSession() {
+  const sess = sessionStorage.getItem('ldSession');
+  if (sess) {
+    try {
+      const s = JSON.parse(sess);
+      const auth = getAuth() || { username: 'admin', passwordHash: DEFAULT_HASH };
+      if (s.username === auth.username) {
+        document.getElementById('loginPage').classList.add('hidden');
+        initDashboard(s.username, auth);
+        return;
+      }
+    } catch(e) {}
   }
 })();
 </script>
