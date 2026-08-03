@@ -236,7 +236,7 @@
     <div id="lockoutNotice" class="hidden mb-4 p-3 rounded-xl text-sm text-center" style="background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25); color: #f87171;"></div>
     <!-- Default creds notice -->
     <div class="mb-4 p-3 rounded-xl text-xs" style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: #a5b4fc;">
-      Default: <strong>angga</strong> / <strong>aa112233</strong>
+      Default: <strong>admin</strong> / <strong>admin123</strong>
     </div>
 
     <form id="loginForm" onsubmit="return handleLogin(event)">
@@ -311,7 +311,7 @@
           <span id="sidebarAvatarText">A</span>
         </div>
         <div class="flex-1 min-w-0">
-          <div style="font-size: 13px; font-weight: 600; color: var(--text);" id="sidebarUsername">angga</div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--text);" id="sidebarUsername">admin</div>
           <div style="font-size: 11px; color: var(--muted);">Administrator</div>
         </div>
       </div>
@@ -339,7 +339,7 @@
         <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); font-size: 12px; font-weight: 700;">
           <span id="topbarAvatarText">A</span>
         </div>
-        <span id="topbarUsername" class="hidden md:block text-sm font-semibold text-white">angga</span>
+        <span id="topbarUsername" class="hidden md:block text-sm font-semibold text-white">admin</span>
       </div>
       <button onclick="handleLogout()" class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all" style="background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2);" onmouseover="this.style.background='rgba(239,68,68,0.22)'" onmouseout="this.style.background='rgba(239,68,68,0.12)'">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -721,7 +721,7 @@ function hashPassword(pass) {
   for (let i = 0; i < 5; i++) h = fnv1a(h + salt);
   return h;
 }
-const DEFAULT_HASH = hashPassword('aa112233');
+const DEFAULT_HASH = hashPassword('admin123');
 
 // ===================== DATA =====================
 function getDB() {
@@ -781,7 +781,7 @@ function handleLogin(e) {
   const remember = document.getElementById('rememberMe').checked;
   const warn = document.getElementById('loginWarning');
 
-  const auth = getAuth() || { username: 'angga', passwordHash: DEFAULT_HASH };
+  const auth = getAuth() || { username: 'admin', passwordHash: DEFAULT_HASH };
 
   if (user === auth.username && hashPassword(pass) === auth.passwordHash) {
     loginAttempts = 0;
@@ -1500,7 +1500,7 @@ function toggleCardPw(id, pass, btn) {
   if (sess) {
     try {
       const s = JSON.parse(sess);
-      const auth = getAuth() || { username: 'angga', passwordHash: DEFAULT_HASH };
+      const auth = getAuth() || { username: 'admin', passwordHash: DEFAULT_HASH };
       if (s.username === auth.username) {
         document.getElementById('loginPage').classList.add('hidden');
         initDashboard(s.username, auth);
