@@ -192,35 +192,36 @@
 </div>
 
 <!-- ========== MODAL ACTIVE/UNUSED ========== -->
-<div>
-  <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">
-    Nama Platform / Website *
-  </label>
-  <select id="aName" class="input-field">
-    <option value="">-- Pilih Platform --</option>
-    <option value="Instagram">Instagram</option>
-    <option value="TikTok">TikTok</option>
-    <option value="Facebook">Facebook</option>
-    <option value="YouTube">YouTube</option>
-    <option value="Twitter">Twitter</option>
-    <option value="LinkedIn">LinkedIn</option>
-    <option value="Website">Website</option>
-  </select>
-</div>
-
-<div>
-  <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">
-    Kategori
-  </label>
-  <select id="aCat" class="input-field">
-    <option value="">-- Pilih Kategori --</option>
-    <option value="Social Media">Social Media</option>
-    <option value="Blog">Blog</option>
-    <option value="E-Commerce">E-Commerce</option>
-    <option value="Portfolio">Portfolio</option>
-    <option value="News">News</option>
-    <option value="Entertainment">Entertainment</option>
-  </select>
+<!-- ========== MODAL ACTIVE/UNUSED ========== -->
+<div class="modal-backdrop" id="modalActive" style="display:none;" onclick="closeModalActive(event)">
+  <div class="modal-box modal-in" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+      <h3 id="modalActiveTitle" style="font-size:1rem;font-weight:700;color:#e2e2f0;">Tambah Link Aktif</h3>
+      <button onclick="closeModalActive()" style="background:none;border:none;cursor:pointer;color:var(--muted);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="modalActiveErr" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:.6rem .85rem;font-size:.8rem;color:#fca5a5;margin-bottom:.9rem;"></div>
+    <div style="display:flex;flex-direction:column;gap:.9rem;">
+      <div>
+        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Nama Platform / Website *</label>
+        <input id="aName" class="input-field" type="text" placeholder="cth: Instagram, TikTok"/>
+      </div>
+      <div>
+        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">URL Link *</label>
+        <input id="aUrl" class="input-field" type="text" placeholder="https://..."/>
+      </div>
+      <div>
+        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Kategori</label>
+        <input id="aCat" class="input-field" type="text" placeholder="cth: Social Media, Blog"/>
+      </div>
+      <div>
+        <label style="font-size:.78rem;color:#9ca3af;font-weight:500;display:block;margin-bottom:.35rem;">Catatan</label>
+        <textarea id="aNote" class="input-field" rows="2" placeholder="Opsional..." style="resize:vertical;"></textarea>
+      </div>
+      <button id="modalActiveBtn" onclick="submitActive()" class="btn-primary" style="width:100%;padding:.7rem;font-size:.875rem;margin-top:.25rem;">Simpan</button>
+    </div>
+  </div>
 </div>
 
 <!-- ========== MODAL LOGIN ========== -->
