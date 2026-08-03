@@ -772,34 +772,9 @@ let moveTargetId = null;
 let deleteTarget = { type: null, id: null };
 
 function handleLogin(e) {
-    e.preventDefault();
-
-    const user = document.getElementById("loginUser").value.trim();
-    const pass = document.getElementById("loginPass").value;
-
-    // Login Default
-    if (user === "admin" && pass === "admin123") {
-
-        sessionStorage.setItem("ldSession", JSON.stringify({
-            username: "admin",
-            time: Date.now()
-        }));
-
-        doLoginTransition("admin", {
-            username: "admin",
-            passwordHash: DEFAULT_HASH
-        });
-
-        return false;
-    }
-
-    // Login gagal
-    const warn = document.getElementById("loginWarning");
-    warn.innerHTML = "Username atau Password salah!";
-    warn.classList.remove("hidden");
-
-    return false;
-}
+  e.preventDefault();
+  const now = Date.now();
+  if (lockoutUntil > now) return false;
 
   const user = document.getElementById('loginUser').value.trim();
   const pass = document.getElementById('loginPass').value;
