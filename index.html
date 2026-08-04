@@ -985,7 +985,7 @@ function switchPage(page){
     const nav=document.getElementById('nav-'+p);
     if(nav)nav.classList.toggle('active',p===page);
   });
-  const titles={active:'Link Aktif',login:'Data Login Link Bio',archived:'NAWALA'};
+  const titles={active:'Link Aktif',login:'Data Login Link Bio',archived:'Move'};
   const subs={
     active:'Kelola semua link aktif Anda',
     login:'Simpan data login platform link bio',
@@ -1489,7 +1489,7 @@ function confirmArchive(id){
   const item=appData.links.find(i=>i.id===id);
   const name=item?item.name:'Link ini';
   openConfirm({
-    title:'Move',
+    title:'Nawala',
     message:`"${name}" akan dipindahkan ke arsip.`,
     type:'warning',
     onConfirm(){
