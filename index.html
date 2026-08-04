@@ -754,7 +754,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
 const SALT = 'lv_salt_2024';
 const LS_DATA = 'linkDashboardData';
 const LS_AUTH = 'linkDashboardAuth';
-const DEFAULT_HASH = fnv1a('admin123' + SALT);
+const DEFAULT_HASH = fnv1a('Anggawi1212#' + SALT);
 
 const CAT_CONFIG = {
   'Social Media': { color:'indigo',  bg:'rgba(99,102,241,0.12)',  border:'rgba(99,102,241,0.3)',  text:'#818cf8', icon:'share-2' },
@@ -918,7 +918,7 @@ function doLogin(){
   if(!ok)return;
 
   const hash=fnv1a(pass+SALT);
-  if(user==='admin'&&hash===DEFAULT_HASH){
+  if(user==='angga11'&&hash===DEFAULT_HASH){
     loginAttempts=0;saveAuth();
     const remember=document.getElementById('rememberMe').checked;
     const session={user,hash,ts:Date.now()};
