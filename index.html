@@ -742,14 +742,14 @@ let currentEditId = null;
 let currentUser   = '';
 let currentHash   = '';
 
-function initDashboard(user, hash){
+async function initDashboard(user, hash){
   currentUser = user;
   currentHash = hash;
   document.getElementById('loginPage').style.display     = 'none';
   document.getElementById('dashboardPage').style.display = 'flex';
   document.getElementById('sidebarUsername').textContent  = user;
   document.getElementById('defaultWarnBanner').style.display = (hash === DEFAULT_HASH) ? 'flex' : 'none';
-  loadData();
+  await loadData();
   loadBg();
   switchPage('active');
 }
