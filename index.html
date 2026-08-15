@@ -389,33 +389,36 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
     <div class="modal-body">
       <!-- Section A: 2FA -->
       <div class="settings-section">
-        <div class="settings-section-title">Kode 2FA</div>
+        <div class="settings-section-title">Ubah Kode 2FA</div>
         <div style="margin-bottom:10px;">
-          <label class="form-label">Kode 2FA (untuk menu Data Login Link Bio)</label>
-          <input id="mSet2FA" class="form-input" type="text" placeholder="123456"/>
-          <p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">Kosongkan lalu simpan untuk memakai kode default 123456.</p>
+          <label class="form-label">Kode 2FA Saat Ini</label>
+          <input id="mSet2FAcur" class="form-input" type="password" autocomplete="off" placeholder="Kode 2FA saat ini"/>
         </div>
+        <div style="margin-bottom:10px;">
+          <label class="form-label">Kode 2FA Baru</label>
+          <input id="mSet2FA" class="form-input" type="text" autocomplete="off" placeholder="Kode 2FA baru"/>
+          <p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">Kode yang tersimpan TIDAK ditampilkan di sini. Kosongkan lalu simpan untuk memakai kode default 123456.</p>
+        </div>
+        <div id="errSettings2FA" class="inline-error"></div>
         <button class="btn btn-primary btn-sm" onclick="save2FASettings()">Simpan Kode 2FA</button>
       </div>
-      <!-- Section B: Background -->
+      <!-- Section B: Ubah Password -->
       <div class="settings-section">
-        <div class="settings-section-title">Latar Belakang Dashboard</div>
+        <div class="settings-section-title">Ubah Password Login</div>
         <div style="margin-bottom:10px;">
-          <label class="form-label">Pilih gambar dari perangkat</label>
-          <input type="file" id="mBgFile" accept="image/*" style="width:100%;font-size:13px;color:var(--text-secondary);cursor:pointer;"/>
+          <label class="form-label">Password Saat Ini</label>
+          <input id="mCurPass" class="form-input" type="password" autocomplete="current-password" placeholder="Password saat ini"/>
         </div>
         <div style="margin-bottom:10px;">
-          <label class="form-label">atau tempel URL gambar</label>
-          <input id="mBgUrl" class="form-input" type="text" placeholder="https://i.postimg.cc/rp3QkP4P/image.png"/>
+          <label class="form-label">Password Baru</label>
+          <input id="mNewPass" class="form-input" type="password" autocomplete="new-password" placeholder="Password baru"/>
         </div>
-        <div style="margin-bottom:14px;">
-          <label class="form-label">Gelap overlay (<span id="dimLabel">55</span>%)</label>
-          <input type="range" id="mBgDim" min="0" max="90" value="55" oninput="previewDim(this.value)"/>
+        <div style="margin-bottom:10px;">
+          <label class="form-label">Konfirmasi Password Baru</label>
+          <input id="mNewPass2" class="form-input" type="password" autocomplete="new-password" placeholder="Ulangi password baru"/>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="applyBgFromSettings()">Terapkan / Ganti Gambar</button>
-          <button class="btn btn-secondary btn-sm" onclick="clearBg()">Hapus Background</button>
-        </div>
+        <div id="errSettingsPass" class="inline-error"></div>
+        <div style="margin-top:4px;"><button class="btn btn-primary btn-sm" onclick="savePasswordChange()">Ubah Password</button></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -434,7 +437,17 @@ const LS_AUTH = 'linkDashboardAuth';
 const LS_BG   = 'linkDashboardBg';
 const LS_2FA  = 'linkDashboard2FA';
 const DEFAULT_HASH = fnv1a('Anggawi1212#' + SALT);
-const DEFAULT_2FA  = 'Aa456654##';
+const DEFAULT_2FA  = '123456';
+const LS_PASS      = 'linkDashboardPassHash';
+
+// =====================================================================
+// BACKGROUND - hanya bisa diganti dari dalam script ini bos
+// Tempel URL gambar pada BG_URL untuk mengganti background dashboard.
+// Kosongkan ('') jika ingin tetap tampilan gelap polos seperti default.
+// =====================================================================
+const BG_URL = '';
+// Kegelapan overlay teks (0.0 = terang, 0.9 = sangat gelap).
+const BG_DIM = 0.55;
 
 function fnv1a(str){
   let h = 2166136261 >>> 0;
@@ -587,7 +600,7 @@ function doLogin(){
 
   const hash = fnv1a(pass + SALT);
 
-  if(user === 'angga11' && hash === DEFAULT_HASH){
+  if(user === 'angga11' && hash === getValidHash()){
     loginAttempts = 0;
     lockoutUntil  = 0;
     saveAuth();
@@ -1384,19 +1397,8 @@ function confirmRestore(id){
 // BACKGROUND
 // =====================================================================
 function loadBg(){
-  try{
-    const raw = localStorage.getItem(LS_BG);
-    if(!raw) return;
-    const {url, dim} = JSON.parse(raw);
-    if(url) applyBg(url, dim != null ? dim : 0.55);
-    // Sync slider
-    const saved = JSON.parse(raw);
-    const dimPct = Math.round((saved.dim != null ? saved.dim : 0.55) * 100);
-    const slider = document.getElementById('mBgDim');
-    if(slider){ slider.value = dimPct; }
-    const dimLabel = document.getElementById('dimLabel');
-    if(dimLabel) dimLabel.textContent = dimPct;
-  } catch(e){}
+  // Background diambil dari konstanta BG_URL & BG_DIM di bagian atas script
+  applyBg(BG_URL, BG_DIM);
 }
 
 function applyBg(url, dim){
@@ -1478,34 +1480,87 @@ function clearBg(){
 // SETTINGS MODAL
 // =====================================================================
 function openSettingsModal(){
-  // Prefill 2FA code
-  document.getElementById('mSet2FA').value = getSettings2FA();
-  // Prefill bg url + dim
-  try{
-    const raw = localStorage.getItem(LS_BG);
-    const slider = document.getElementById('mBgDim');
-    const label  = document.getElementById('dimLabel');
-    if(raw){
-      const {url, dim} = JSON.parse(raw);
-      const urlInput = document.getElementById('mBgUrl');
-      if(urlInput && url && !url.startsWith('data:')) urlInput.value = url;
-      const dimPct = Math.round((dim != null ? dim : 0.55)*100);
-      if(slider) slider.value = dimPct;
-      if(label)  label.textContent = dimPct;
-    } else {
-      if(slider) slider.value = 55;
-      if(label)  label.textContent = '55';
-    }
-  } catch(e){}
+  // Kolom 2FA selalu kosong - kode tersimpan TIDAK pernah ditampilkan (privasi)
+  document.getElementById('mSet2FAcur').value = '';
+  document.getElementById('mSet2FA').value    = '';
+  document.getElementById('errSettings2FA').classList.remove('show');
+  // Reset form ubah password
+  document.getElementById('mCurPass').value  = '';
+  document.getElementById('mNewPass').value  = '';
+  document.getElementById('mNewPass2').value = '';
+  document.getElementById('errSettingsPass').classList.remove('show');
   openModal('modalSettings');
 }
 
 function save2FASettings(){
+  const err = document.getElementById('errSettings2FA');
+  err.classList.remove('show');
+
+  const cur = document.getElementById('mSet2FAcur').value.trim();
   const val = document.getElementById('mSet2FA').value.trim();
+
+  if(!cur){
+    err.textContent = 'Masukkan kode 2FA saat ini terlebih dahulu.';
+    err.classList.add('show');
+    return;
+  }
+  if(cur !== getSettings2FA()){
+    err.textContent = 'Kode 2FA saat ini salah.';
+    err.classList.add('show');
+    return;
+  }
+
   setSettings2FA(val);
   // Reset 2FA session so admin must re-verify with new code
   twoFAVerified = false;
+  document.getElementById('mSet2FAcur').value = '';
+  document.getElementById('mSet2FA').value    = '';
   showToast({message:'Kode 2FA diperbarui', type:'success'});
+}
+
+function getValidHash(){
+  const stored = localStorage.getItem(LS_PASS);
+  return (stored && stored.trim() !== '') ? stored : DEFAULT_HASH;
+}
+
+function savePasswordChange(){
+  const err = document.getElementById('errSettingsPass');
+  err.classList.remove('show');
+  const cur  = document.getElementById('mCurPass').value;
+  const np   = document.getElementById('mNewPass').value;
+  const np2  = document.getElementById('mNewPass2').value;
+
+  if(!cur || !np || !np2){
+    err.textContent = 'Semua kolom password wajib diisi.';
+    err.classList.add('show');
+    return;
+  }
+  if(fnv1a(cur + SALT) !== getValidHash()){
+    err.textContent = 'Password saat ini salah.';
+    err.classList.add('show');
+    return;
+  }
+  if(np.length < 6){
+    err.textContent = 'Password baru minimal 6 karakter.';
+    err.classList.add('show');
+    return;
+  }
+  if(np !== np2){
+    err.textContent = 'Konfirmasi password baru tidak cocok.';
+    err.classList.add('show');
+    return;
+  }
+
+  localStorage.setItem(LS_PASS, fnv1a(np + SALT));
+  currentHash = fnv1a(np + SALT);
+  // Sembunyikan peringatan password default
+  document.getElementById('defaultWarnBanner').style.display = 'none';
+
+  document.getElementById('mCurPass').value  = '';
+  document.getElementById('mNewPass').value  = '';
+  document.getElementById('mNewPass2').value = '';
+  closeModal('modalSettings');
+  showToast({message:'Password berhasil diubah. Gunakan password baru saat login berikutnya.', type:'success'});
 }
 
 // =====================================================================
