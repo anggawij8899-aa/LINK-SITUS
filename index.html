@@ -443,9 +443,9 @@ const LS_PASS      = 'linkDashboardPassHash';
 // =====================================================================
 // BACKGROUND - hanya bisa diganti dari dalam script ini bos
 // Tempel URL gambar pada BG_URL untuk mengganti background dashboard.
-// Kosongkan ('https://i.postimg.cc/C1C6SVgG/image.png') jika ingin tetap tampilan gelap polos seperti default.
+// Kosongkan ('') jika ingin tetap tampilan gelap polos seperti default.
 // =====================================================================
-const BG_URL = '';
+const BG_URL = 'https://i.postimg.cc/rp3QkP4P/image.png';
 // Kegelapan overlay teks (0.0 = terang, 0.9 = sangat gelap).
 const BG_DIM = 0.55;
 
@@ -1459,7 +1459,7 @@ function clearBg(){
   const bg    = document.getElementById('dashboardBg');
   const dimEl = document.getElementById('dashboardBgDim');
   if(bg){
-    bg.style.backgroundImage = 'https://i.postimg.cc/rp3QkP4P/image.png';
+    bg.style.backgroundImage = '';
   }
   if(dimEl){
     dimEl.style.background = 'rgba(0,0,0,0)';
