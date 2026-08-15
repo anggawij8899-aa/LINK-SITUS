@@ -440,6 +440,15 @@ const DEFAULT_HASH = fnv1a('Anggawi1212#' + SALT);
 const DEFAULT_2FA  = '123456';
 const LS_PASS      = 'linkDashboardPassHash';
 
+  // ===== SUPABASE (tambah sendiri) =====
+const SUPABASE_URL       = "https://isxclndqezfyjimfskbg.supabase.co/rest/v1/";
+const SUPABASE_ANON_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzeGNsbmRxZXpmeWppbWZza2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk0NDQsImV4cCI6MjEwMjM5NTQ0NH0.fhMLsc5R-_CGDa8xMdDolscWG9wywHDhleA8RkDdvt8";
+const SB_HEADERS = {
+  'apikey': SUPABASE_ANON_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+  'Content-Type': 'application/json'
+};
+
 // =====================================================================
 // BACKGROUND - hanya bisa diganti dari dalam script ini bos
 // Tempel URL gambar pada BG_URL untuk mengganti background dashboard.
@@ -504,21 +513,51 @@ function escHtml(str){
 // =====================================================================
 let appData = {links:[], loginData:[], archived:[]};
 
-function loadData(){
+async function loadData(){
+  let local = null;
   try{
     const raw = localStorage.getItem(LS_DATA);
-    if(raw) appData = JSON.parse(raw);
-    if(!appData.links)     appData.links = [];
-    if(!appData.loginData) appData.loginData = [];
-    if(!appData.archived)  appData.archived = [];
-  } catch(e){
-    appData = {links:[], loginData:[], archived:[]};
+    if(raw) local = JSON.parse(raw);
+  }catch(e){ local = null; }
+
+  if(SUPABASE_URL && SUPABASE_ANON_KEY){
+    try{
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/sb_data?select=data&id=eq.1`, {headers:SB_HEADERS});
+      if(res.ok){
+        const rows = await res.json();
+        if(rows.length && rows[0].data){
+          appData = rows[0].data;
+          try{ localStorage.setItem(LS_DATA, JSON.stringify(appData)); }catch(e){}
+        }else if(local){
+          appData = local;   // server kosong -> pakai data lokal & unggah ke server
+          await saveData();
+        }
+      }
+    }catch(e){ /* server error -> fallback ke lokal */ }
   }
+
+  if(!appData.links)     appData.links = [];
+  if(!appData.loginData) appData.loginData = [];
+  if(!appData.archived)  appData.archived = [];
+  if(local && !(SUPABASE_URL && SUPABASE_ANON_KEY)) appData = local;
 }
 
-function saveData(){
-  localStorage.setItem(LS_DATA, JSON.stringify(appData));
+async function saveData(){
+  if(!appData.links)     appData.links = [];
+  if(!appData.loginData) appData.loginData = [];
+  if(!appData.archived)  appData.archived = [];
+  try{ localStorage.setItem(LS_DATA, JSON.stringify(appData)); }catch(e){}
   updateBadges();
+
+  if(SUPABASE_URL && SUPABASE_ANON_KEY){
+    try{
+      await fetch(`${SUPABASE_URL}/rest/v1/sb_data`, {
+        method:'POST',
+        headers:Object.assign({}, SB_HEADERS, {'Prefer':'resolution=merge-duplicates'}),
+        body:JSON.stringify({id:1, data:appData})
+      });
+    }catch(e){}
+  }
 }
 
 function genId(){
