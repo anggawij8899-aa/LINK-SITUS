@@ -9,7 +9,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-:root{--bg-base:#0d0d1a;--bg-surface:#13132a;--bg-card:#1a1a2e;--bg-elevated:#21213a;--border:#2a2a4a;--border-subtle:rgba(42,42,74,0.6);--text-primary:#e2e2f0;--text-secondary:#8888aa;--accent:#7c3aed;--accent-soft:rgba(124,58,237,0.15);}
+:root{
+  --bg-base:#0d0d1a;
+  --bg-surface:#13132a;
+  --bg-card:#1a1a2e;
+  --bg-elevated:#21213a;
+  --border:#2a2a4a;
+  --border-subtle:rgba(42,42,74,0.6);
+  --text-primary:#e2e2f0;
+  --text-secondary:#8888aa;
+  --accent:#7c3aed;
+  --accent-soft:rgba(124,58,237,0.15);
+}
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg-base);color:var(--text-primary);overflow-x:hidden;}
 #loginPage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:200;}
@@ -79,15 +90,18 @@ textarea.form-input{resize:vertical;min-height:70px;}
 .search-input{width:100%;padding:9px 14px 9px 38px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:9px;color:var(--text-primary);font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;}
 .search-input:focus{border-color:rgba(124,58,237,0.6);}
 .vertical-divider{width:1px;height:20px;background:var(--border);}
+/* TOAST */
 #toastContainer{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
 .toast{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:500;background:var(--bg-elevated);border:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,0.4);pointer-events:all;animation:toastIn 0.3s cubic-bezier(0.34,1.4,0.64,1);min-width:220px;max-width:340px;}
 @keyframes toastIn{from{transform:translateY(20px) scale(0.95);opacity:0;}to{transform:translateY(0) scale(1);opacity:1;}}
 .toast.fade-out{animation:toastOut 0.3s ease forwards;}
 @keyframes toastOut{to{transform:translateY(10px) scale(0.95);opacity:0;}}
 .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+/* DASHBOARD BG */
 #dashboardBg{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;background-repeat:no-repeat;}
 #dashboardBgDim{position:absolute;inset:0;}
 #dashboardPage{position:relative;z-index:1;}
+/* SETTINGS SECTIONS */
 .settings-section{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
 .settings-section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
 .settings-section-title{font-size:13px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;}
@@ -95,7 +109,11 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
 </style>
 </head>
 <body>
+
+<!-- TOAST -->
 <div id="toastContainer"></div>
+
+<!-- DASHBOARD BACKGROUND -->
 <div id="dashboardBg"><div id="dashboardBgDim"></div></div>
 
 <!-- LOGIN PAGE -->
@@ -129,28 +147,28 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
   </div>
 </div>
 
-<!-- DASHBOARD PAGE -->
+<!-- DASHBOARD -->
 <div id="dashboardPage" style="height:100vh;display:none;flex-direction:row;">
   <div class="sidebar">
     <div class="sidebar-logo">LinkVault</div>
     <div style="padding:0 10px;flex:1;">
       <div class="nav-item active" onclick="switchPage('active')" id="nav-active">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
         Link Aktif <span class="nav-badge" id="badge-active">0</span>
       </div>
       <div class="nav-item" onclick="switchPage('login')" id="nav-login">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Data Login <span class="nav-badge" id="badge-login">0</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Data Login Link Bio <span class="nav-badge" id="badge-login">0</span>
       </div>
       <div class="nav-item" onclick="switchPage('archived')" id="nav-archived">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
         NAWALA <span class="nav-badge" id="badge-archived">0</span>
       </div>
     </div>
     <div style="padding:0 20px;border-top:1px solid var(--border-subtle);padding-top:16px;margin-top:16px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
         <div style="width:32px;height:32px;background:linear-gradient(135deg,#7c3aed,#6366f1);border-radius:8px;display:flex;align-items:center;justify-content:center;">
-          <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
         <div>
           <div id="sidebarUsername" style="font-size:13px;font-weight:600;"></div>
@@ -158,15 +176,16 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
         </div>
       </div>
       <button class="btn btn-secondary" style="width:100%;justify-content:center;font-size:12px;margin-bottom:8px;" onclick="openSettingsModal()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Pengaturan
       </button>
       <button class="btn btn-secondary" style="width:100%;justify-content:center;font-size:12px;" onclick="doLogout()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Keluar
       </button>
     </div>
   </div>
+
   <div class="main-content">
     <div class="top-bar">
       <div>
@@ -174,20 +193,21 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
         <p id="pageSubtitle" style="font-size:12px;color:var(--text-secondary);margin-top:2px;"></p>
       </div>
       <button id="btnAdd" class="btn btn-primary" onclick="openAddModal()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         <span id="btnAddLabel">Tambah Link</span>
       </button>
     </div>
+
     <div style="padding:24px 28px;flex:1;">
       <div id="defaultWarnBanner" class="warn-banner" style="margin-bottom:20px;display:none;">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         Anda masih menggunakan password default. Segera ubah password.
       </div>
       <div id="statTiles" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;"></div>
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
         <div id="filterChips" style="display:flex;gap:8px;flex-wrap:wrap;flex:1;"></div>
         <div class="search-wrap">
-          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input id="searchInput" class="search-input" placeholder="Cari..." oninput="renderCurrentPage()"/>
         </div>
       </div>
@@ -196,37 +216,41 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
   </div>
 </div>
 
-<!-- MODAL: ADD/EDIT LINK -->
+<!-- MODAL: LINK -->
 <div id="modalLink" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
-      <h3 id="modalLinkTitle" style="font-size:16px;font-weight:700;">Tambah Link</h3>
-      <button class="btn btn-secondary btn-icon" onclick="closeModal('modalLink')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <h3 id="modalLinkTitle" style="font-size:16px;font-weight:700;"></h3>
+      <button class="btn btn-icon btn-secondary" onclick="closeModal('modalLink')">&#x2715;</button>
     </div>
     <div class="modal-body">
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Nama Link *</label>
-        <input id="fLinkName" class="form-input" type="text" placeholder="Contoh: Google"/>
-        <div id="errLinkName" class="inline-error">Nama wajib diisi.</div>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">URL *</label>
-        <input id="fLinkUrl" class="form-input" type="text" placeholder="https://..."/>
-        <div id="errLinkUrl" class="inline-error">URL wajib diisi.</div>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Kategori</label>
-        <input id="fLinkCat" class="form-input" type="text" placeholder="Contoh: Sosial Media"/>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Deskripsi</label>
-        <textarea id="fLinkDesc" class="form-input" placeholder="Opsional..."></textarea>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Ikon (emoji)</label>
-        <input id="fLinkIcon" class="form-input" type="text" placeholder="🔗"/>
+      <div style="display:grid;gap:14px;">
+        <div><label class="form-label">Nama Link</label><input id="mLinkName" class="form-input" placeholder="Contoh: Website Resmi"/></div>
+        <div><label class="form-label">URL</label><input id="mLinkUrl" class="form-input" placeholder="https://..."/></div>
+        <div>
+          <label class="form-label">Kategori</label>
+          <select id="mLinkCat" class="form-input" onchange="checkCustomCat('mLinkCat','mLinkCatCustom')">
+            <option value="">-- Pilih Kategori --</option>
+            <option>LINK AMP</option>
+            <option>LINK DKWL &amp; JALUR</option>
+            <option>LINK IP</option>
+            <option>LINK LANDINGPAGE</option>
+            <option>DOMAIN IT</option>
+            <option>FUSION X</option>
+            <option>DOMAIN CADANGAN</option>
+            <option>LINK DOWNLOAD APK</option>
+            <option>LINK KEPALA 3</option>
+            <option>LINK KEPALA 8</option>
+            <option>LINK TANAM PROMOSI</option>
+            <option>LINK DIRECT BLOG</option>
+            <option>LINK TANAM APK</option>
+            <option>CANONICAL</option>
+            <option>Lainnya</option>
+            <option value="__custom__">+ Kategori Baru...</option>
+          </select>
+        </div>
+        <div id="mLinkCatCustomWrap" style="display:none;"><label class="form-label">Nama Kategori Baru</label><input id="mLinkCatCustom" class="form-input" placeholder="Tulis nama kategori baru..."/></div>
+        <div><label class="form-label">Deskripsi</label><textarea id="mLinkDesc" class="form-input" placeholder="Deskripsi singkat (opsional)"></textarea></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -236,74 +260,79 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
   </div>
 </div>
 
-<!-- MODAL: ADD/EDIT LOGIN DATA -->
+<!-- MODAL: LOGIN DATA -->
 <div id="modalLogin" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
-      <h3 id="modalLoginTitle" style="font-size:16px;font-weight:700;">Tambah Data Login</h3>
-      <button class="btn btn-secondary btn-icon" onclick="closeModal('modalLogin')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <h3 id="modalLoginTitle" style="font-size:16px;font-weight:700;"></h3>
+      <button class="btn btn-icon btn-secondary" onclick="closeModal('modalLogin')">&#x2715;</button>
     </div>
     <div class="modal-body">
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Nama Situs / Layanan *</label>
-        <input id="fLoginName" class="form-input" type="text" placeholder="Contoh: Instagram"/>
-        <div id="errLoginName" class="inline-error">Nama wajib diisi.</div>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">URL</label>
-        <input id="fLoginUrl" class="form-input" type="text" placeholder="https://..."/>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Username / Email</label>
-        <input id="fLoginUser" class="form-input" type="text" placeholder="user@email.com"/>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Password</label>
-        <div class="pw-wrap">
-          <input id="fLoginPass" class="form-input" type="password" placeholder="Password"/>
-          <button class="pw-toggle" onclick="togglePw('fLoginPass',this)" type="button">&#128065;</button>
+      <div style="display:grid;gap:14px;">
+        <div><label class="form-label">Nama Platform</label><input id="mLdPlatform" class="form-input" placeholder="Contoh: Linktree, Beacons..."/></div>
+        <div>
+          <label class="form-label">Kategori</label>
+          <select id="mLdCat" class="form-input" onchange="checkCustomCat('mLdCat','mLdCatCustom')">
+            <option value="">-- Pilih Kategori --</option>
+            <option>DATA LOGIN LINK-LIST</option>
+            <option>DATA LOGIN HEYLINK</option>
+            <option>DATA LOGIN MEZINK</option>
+            <option>DATA LOGIN LINKLIT</option>
+            <option>DATA LOGIN DESTYPAGE</option>
+            <option>DATA LOGIN OFFICIAL.LINK</option>
+            <option>DATA LOGIN BIO-LINK</option>
+            <option>Lainnya</option>
+            <option value="__custom__">+ Kategori Baru...</option>
+          </select>
         </div>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Catatan</label>
-        <textarea id="fLoginNote" class="form-input" placeholder="Opsional..."></textarea>
+        <div id="mLdCatCustomWrap" style="display:none;"><label class="form-label">Nama Kategori Baru</label><input id="mLdCatCustom" class="form-input" placeholder="Tulis nama kategori baru..."/></div>
+        <div><label class="form-label">URL</label><input id="mLdUrl" class="form-input" placeholder="https://..."/></div>
+        <div><label class="form-label">Username / Email</label><input id="mLdUsername" class="form-input" placeholder="username atau email"/></div>
+        <div>
+          <label class="form-label">Password</label>
+          <div class="pw-wrap">
+            <input id="mLdPassword" class="form-input" type="password" placeholder="password"/>
+            <button class="pw-toggle" onclick="togglePw('mLdPassword',this)" type="button">&#128065;</button>
+          </div>
+        </div>
+        <div><label class="form-label">Link Terkait</label><select id="mLdRelated" class="form-input"><option value="">-- Tidak ada --</option></select></div>
+        <div><label class="form-label">Catatan</label><textarea id="mLdNotes" class="form-input" placeholder="Catatan tambahan (opsional)"></textarea></div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('modalLogin')">Batal</button>
-      <button class="btn btn-primary" onclick="saveLoginItem()">Simpan</button>
+      <button class="btn btn-primary" onclick="saveLoginData()">Simpan</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL: ARCHIVED (add/edit) -->
+<!-- MODAL: ARCHIVED EDIT -->
 <div id="modalArchived" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
-      <h3 id="modalArchivedTitle" style="font-size:16px;font-weight:700;">Tambah NAWALA</h3>
-      <button class="btn btn-secondary btn-icon" onclick="closeModal('modalArchived')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <h3 style="font-size:16px;font-weight:700;">Edit Link Arsip</h3>
+      <button class="btn btn-icon btn-secondary" onclick="closeModal('modalArchived')">&#x2715;</button>
     </div>
     <div class="modal-body">
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Nama *</label>
-        <input id="fArcName" class="form-input" type="text" placeholder="Nama link"/>
-        <div id="errArcName" class="inline-error">Nama wajib diisi.</div>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">URL</label>
-        <input id="fArcUrl" class="form-input" type="text" placeholder="https://..."/>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Kategori</label>
-        <input id="fArcCat" class="form-input" type="text" placeholder="Kategori"/>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label">Deskripsi</label>
-        <textarea id="fArcDesc" class="form-input" placeholder="Opsional..."></textarea>
+      <div style="display:grid;gap:14px;">
+        <div><label class="form-label">Nama Link</label><input id="mArcName" class="form-input" placeholder="Nama link"/></div>
+        <div><label class="form-label">URL</label><input id="mArcUrl" class="form-input" placeholder="https://..."/></div>
+        <div>
+          <label class="form-label">Kategori</label>
+          <select id="mArcCat" class="form-input" onchange="checkCustomCat('mArcCat','mArcCatCustom')">
+            <option value="">-- Pilih Kategori --</option>
+            <option>Social Media</option>
+            <option>Link Bio</option>
+            <option>Blog</option>
+            <option>Landing Page</option>
+            <option>E-Commerce</option>
+            <option>Portfolio</option>
+            <option>Lainnya</option>
+            <option value="__custom__">+ Kategori Baru...</option>
+          </select>
+        </div>
+        <div id="mArcCatCustomWrap" style="display:none;"><label class="form-label">Nama Kategori Baru</label><input id="mArcCatCustom" class="form-input" placeholder="Nama kategori baru..."/></div>
+        <div><label class="form-label">Deskripsi</label><textarea id="mArcDesc" class="form-input" placeholder="Deskripsi (opsional)"></textarea></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -316,21 +345,36 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
 <!-- MODAL: CONFIRM -->
 <div id="modalConfirm" class="modal-overlay">
   <div class="modal modal-sm">
+    <div class="modal-body" style="padding-top:28px;text-align:center;">
+      <div id="confirmIconWrap" style="margin:0 auto 16px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;"></div>
+      <h3 id="confirmTitle" style="font-size:16px;font-weight:700;margin-bottom:8px;"></h3>
+      <p id="confirmMsg" style="font-size:13px;color:var(--text-secondary);line-height:1.5;"></p>
+    </div>
+    <div class="modal-footer" style="justify-content:center;gap:12px;">
+      <button class="btn btn-secondary" onclick="closeModal('modalConfirm')">Batal</button>
+      <button id="confirmOkBtn" class="btn btn-primary" onclick="confirmAction()">Ya, Lanjutkan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 2FA -->
+<div id="modal2FA" class="modal-overlay">
+  <div class="modal modal-sm">
     <div class="modal-header">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div id="confirmIconWrap" style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;"></div>
-        <h3 id="confirmTitle" style="font-size:16px;font-weight:700;"></h3>
-      </div>
-      <button class="btn btn-secondary btn-icon" onclick="closeModal('modalConfirm')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <h3 style="font-size:16px;font-weight:700;">Verifikasi 2FA</h3>
+      <button class="btn btn-icon btn-secondary" onclick="closeModal('modal2FA')">&#x2715;</button>
     </div>
     <div class="modal-body">
-      <p id="confirmMsg" style="font-size:14px;color:var(--text-secondary);"></p>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">Masukkan kode 2FA untuk mengakses menu Data Login Link Bio.</p>
+      <div>
+        <label class="form-label">Kode 2FA</label>
+        <input id="m2faCode" class="form-input" type="password" inputmode="numeric" placeholder="Masukkan kode 2FA" autocomplete="one-time-code"/>
+        <div id="err2FA" class="inline-error">Kode 2FA salah. Coba lagi.</div>
+      </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('modalConfirm')">Batal</button>
-      <button id="confirmOkBtn" class="btn btn-danger" onclick="confirmAction()">Ya, Lanjutkan</button>
+      <button class="btn btn-secondary" onclick="closeModal('modal2FA')">Batal</button>
+      <button class="btn btn-primary" onclick="verify2FA()">Verifikasi</button>
     </div>
   </div>
 </div>
@@ -340,347 +384,369 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
   <div class="modal">
     <div class="modal-header">
       <h3 style="font-size:16px;font-weight:700;">Pengaturan</h3>
-      <button class="btn btn-secondary btn-icon" onclick="closeModal('modalSettings')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <button class="btn btn-icon btn-secondary" onclick="closeModal('modalSettings')">&#x2715;</button>
     </div>
     <div class="modal-body">
-      <!-- Ganti Password -->
+      <!-- Section A: 2FA -->
       <div class="settings-section">
-        <div class="settings-section-title">Ganti Password</div>
-        <div style="margin-bottom:12px;">
-          <label class="form-label">Password Saat Ini</label>
-          <div class="pw-wrap">
-            <input id="sCurPass" class="form-input" type="password" placeholder="Password saat ini"/>
-            <button class="pw-toggle" onclick="togglePw('sCurPass',this)" type="button">&#128065;</button>
-          </div>
+        <div class="settings-section-title">Ubah Kode 2FA</div>
+        <div style="margin-bottom:10px;">
+          <label class="form-label">Kode 2FA Saat Ini</label>
+          <input id="mSet2FAcur" class="form-input" type="password" autocomplete="off" placeholder="Kode 2FA saat ini"/>
         </div>
-        <div style="margin-bottom:12px;">
-          <label class="form-label">Password Baru</label>
-          <div class="pw-wrap">
-            <input id="sNewPass" class="form-input" type="password" placeholder="Minimal 4 karakter"/>
-            <button class="pw-toggle" onclick="togglePw('sNewPass',this)" type="button">&#128065;</button>
-          </div>
-        </div>
-        <div style="margin-bottom:12px;">
-          <label class="form-label">Konfirmasi Password Baru</label>
-          <div class="pw-wrap">
-            <input id="sConfPass" class="form-input" type="password" placeholder="Ulangi password baru"/>
-            <button class="pw-toggle" onclick="togglePw('sConfPass',this)" type="button">&#128065;</button>
-          </div>
-        </div>
-        <div id="errSettingsPass" class="inline-error"></div>
-        <button class="btn btn-primary btn-sm" style="margin-top:8px;" onclick="savePasswordChange()">Simpan Password</button>
-      </div>
-      <!-- 2FA -->
-      <div class="settings-section">
-        <div class="settings-section-title">Two-Factor Authentication (2FA)</div>
-        <div style="margin-bottom:12px;">
-          <label class="form-label">Kode 2FA Saat Ini (kosongkan jika belum diatur)</label>
-          <div class="pw-wrap">
-            <input id="s2faCur" class="form-input" type="password" placeholder="Kode 2FA aktif"/>
-            <button class="pw-toggle" onclick="togglePw('s2faCur',this)" type="button">&#128065;</button>
-          </div>
-        </div>
-        <div style="margin-bottom:12px;">
-          <label class="form-label">Kode 2FA Baru (kosongkan untuk nonaktifkan)</label>
-          <div class="pw-wrap">
-            <input id="s2faNew" class="form-input" type="password" placeholder="Kode baru (opsional)"/>
-            <button class="pw-toggle" onclick="togglePw('s2faNew',this)" type="button">&#128065;</button>
-          </div>
+        <div style="margin-bottom:10px;">
+          <label class="form-label">Kode 2FA Baru</label>
+          <input id="mSet2FA" class="form-input" type="text" autocomplete="off" placeholder="Kode 2FA baru"/>
+          <p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">Kode yang tersimpan TIDAK ditampilkan di sini. Kosongkan lalu simpan untuk memakai kode default 123456.</p>
         </div>
         <div id="errSettings2FA" class="inline-error"></div>
-        <button class="btn btn-primary btn-sm" style="margin-top:8px;" onclick="save2FASettings()">Simpan 2FA</button>
+        <button class="btn btn-primary btn-sm" onclick="save2FASettings()">Simpan Kode 2FA</button>
       </div>
-      <!-- Background -->
+      <!-- Section B: Ubah Password -->
       <div class="settings-section">
-        <div class="settings-section-title">Background Dashboard</div>
-        <div style="margin-bottom:12px;">
-          <label class="form-label">URL Gambar Background</label>
-          <input id="sBgUrl" class="form-input" type="text" placeholder="https://... (kosongkan untuk default)"/>
+        <div class="settings-section-title">Ubah Password Login</div>
+        <div style="margin-bottom:10px;">
+          <label class="form-label">Password Saat Ini</label>
+          <input id="mCurPass" class="form-input" type="password" autocomplete="current-password" placeholder="Password saat ini"/>
         </div>
-        <div style="margin-bottom:12px;">
-          <label class="form-label">Kegelapan Overlay: <span id="sBgDimVal">0.7</span></label>
-          <input id="sBgDim" type="range" min="0" max="0.95" step="0.05" value="0.7" oninput="document.getElementById('sBgDimVal').textContent=this.value"/>
+        <div style="margin-bottom:10px;">
+          <label class="form-label">Password Baru</label>
+          <input id="mNewPass" class="form-input" type="password" autocomplete="new-password" placeholder="Password baru"/>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="saveBgSettings()">Simpan Background</button>
+        <div style="margin-bottom:10px;">
+          <label class="form-label">Konfirmasi Password Baru</label>
+          <input id="mNewPass2" class="form-input" type="password" autocomplete="new-password" placeholder="Ulangi password baru"/>
+        </div>
+        <div id="errSettingsPass" class="inline-error"></div>
+        <div style="margin-top:4px;"><button class="btn btn-primary btn-sm" onclick="savePasswordChange()">Ubah Password</button></div>
       </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modalSettings')">Tutup</button>
     </div>
   </div>
 </div>
 
 <script>
-/* ============================================================
-   CONSTANTS & STATE
-   ============================================================ */
-const LS_DATA      = 'linkDashboardData';
-const LS_USER      = 'linkDashboardUser';
+// =====================================================================
+// CONSTANTS & CONFIG
+// =====================================================================
+const SALT = 'lv_salt_2024';
+const LS_DATA = 'linkDashboardData';
+const LS_AUTH = 'linkDashboardAuth';
+const LS_BG   = 'linkDashboardBg';
+const LS_2FA  = 'linkDashboard2FA';
+const DEFAULT_HASH = fnv1a('Anggawi1212#' + SALT);
+const DEFAULT_2FA  = '123456';
 const LS_PASS      = 'linkDashboardPassHash';
 
-/* ======================= SUPABASE CONFIG ======================= */
-/* Isi 2 nilai di bawah dari dashboard Supabase (Project Settings > API).
-   1) SUPABASE_URL      = Project URL       contoh: https://abcdefgh.supabase.co
-   2) SUPABASE_ANON_KEY = Project API keys > "anon public" (JANGAN pakai service_role!)
-   Catatan: jika dibiarkan placeholder, aplikasi tetap jalan dalam mode lokal (offline). */
-const SUPABASE_URL      = 'https://isxclndqezfyjimfskbg.supabase.co/rest/v1/';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzeGNsbmRxZXpmeWppbWZza2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk0NDQsImV4cCI6MjEwMjM5NTQ0NH0.fhMLsc5R-_CGDa8xMdDolscWG9wywHDhleA8RkDdvt8';
-const SB_TABLE          = 'vault';
-const SB_ROW_ID         = 'main';
-/* helper Supabase REST (tanpa SDK, biar file tetap mandiri) */
-async function sbFetch(path, options){
-  const url = SUPABASE_URL.replace(/\/+$/,'') + path;
-  const res = await fetch(url, {
-    ...(options||{}),
-    headers:{
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization':'Bearer ' + SUPABASE_ANON_KEY,
-      'Content-Type':'application/json',
-      'Prefer':'return=minimal',
-      ...((options&&options.headers)||{})
-    }
-  });
-  if(!res.ok) throw new Error('Supabase '+res.status);
-  return res.json();
-}
-/* =============================================================== */
-
-const LS_REMEMBER  = 'linkDashboardRemember';
-const LS_SETTINGS  = 'linkDashboardSettings';
-const LS_BG        = 'linkDashboardBg';
-const DEFAULT_USER = 'admin';
-const SALT         = 'lv2024!';
-const DEFAULT_PASS = 'admin123';
-
-let appData        = { links:[], loginData:[], archived:[] };
-let currentPage    = 'active';
-let activeFilter   = 'Semua';
-let editingId      = null;
-let editingType    = null;
-let currentUser    = null;
-let currentHash    = null;
-
-/* ============================================================
-   UTILITIES
-   ============================================================ */
-function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2); }
-function nowStr(){ return new Date().toISOString(); }
+// =====================================================================
+// BACKGROUND - hanya bisa diganti dari dalam script ini bos
+// Tempel URL gambar pada BG_URL untuk mengganti background dashboard.
+// Kosongkan ('') jika ingin tetap tampilan gelap polos seperti default.
+// =====================================================================
+const BG_URL = 'https://i.postimg.cc/dQZkPvT7/image.png';
+// Kegelapan overlay teks (0.0 = terang, 0.9 = sangat gelap).
+const BG_DIM = 0.40;
 
 function fnv1a(str){
-  let h = 2166136261;
-  for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = (h * 16777619) >>> 0; }
+  let h = 2166136261 >>> 0;
+  for(let i = 0; i < str.length; i++){
+    h = (h ^ str.charCodeAt(i)) >>> 0;
+    h = Math.imul(h, 16777619) >>> 0;
+  }
   return h.toString(16);
 }
 
-/* ============================================================
-   SUPABASE-BACKED LOAD / SAVE  (Change 2)
-   ============================================================ */
-async function loadData(){
-  try{
-    const raw = localStorage.getItem(LS_DATA);
-    if(raw){ try{ appData = JSON.parse(raw); }catch(e){} }
-  }catch(e){}
-  try{
-    const rows = await sbFetch('/rest/v1/'+SB_TABLE+'?id=eq.'+SB_ROW_ID+'&select=data');
-    if(rows && rows.length && rows[0].data){ appData = rows[0].data; }
-    else if(localStorage.getItem(LS_DATA)){
-      await saveData(); // seeder: kirim data lokal pertama kali ke server
-    }
-  }catch(err){
-    showToast({message:'Gagal memuat dari server, pakai data lokal', type:'warning'});
+// =====================================================================
+// 2FA HELPERS
+// =====================================================================
+function getSettings2FA(){
+  const v = localStorage.getItem(LS_2FA);
+  return (v !== null && v.trim() !== '') ? v : DEFAULT_2FA;
+}
+function setSettings2FA(code){
+  if(code.trim() === ''){
+    localStorage.removeItem(LS_2FA);
+  } else {
+    localStorage.setItem(LS_2FA, code.trim());
   }
-  if(!appData.links)     appData.links     = [];
-  if(!appData.loginData) appData.loginData = [];
-  if(!appData.archived)  appData.archived  = [];
 }
 
-async function saveData(){
-  try{ localStorage.setItem(LS_DATA, JSON.stringify(appData)); }catch(e){}
+// =====================================================================
+// TOAST
+// =====================================================================
+function showToast(opts){
+  const {message='', type='info', duration=3000} = opts;
+  const colors = {success:'#22c55e', error:'#f43f5e', info:'#6366f1', warning:'#f59e0b'};
+  const dot = colors[type] || colors.info;
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<div class="toast-dot" style="background:${dot}"></div><span>${escHtml(message)}</span>`;
+  const container = document.getElementById('toastContainer');
+  container.appendChild(el);
+  setTimeout(()=>{
+    el.classList.add('fade-out');
+    setTimeout(()=>el.remove(), 350);
+  }, duration);
+}
+
+function escHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// =====================================================================
+// DATA STORE
+// =====================================================================
+let appData = {links:[], loginData:[], archived:[]};
+
+function loadData(){
   try{
-    await sbFetch('/rest/v1/'+SB_TABLE+'?on_conflict=id', {
-      method:'POST',
-      headers:{'Prefer':'resolution=merge-duplicates, return=minimal'},
-      body: JSON.stringify({id:SB_ROW_ID, data:appData, updated_at:new Date().toISOString()})
-    });
-  }catch(err){
-    showToast({message:'Gagal sinkron ke server', type:'error'});
+    const raw = localStorage.getItem(LS_DATA);
+    if(raw) appData = JSON.parse(raw);
+    if(!appData.links)     appData.links = [];
+    if(!appData.loginData) appData.loginData = [];
+    if(!appData.archived)  appData.archived = [];
+  } catch(e){
+    appData = {links:[], loginData:[], archived:[]};
   }
+}
+
+function saveData(){
+  localStorage.setItem(LS_DATA, JSON.stringify(appData));
   updateBadges();
 }
 
-/* ============================================================
-   SETTINGS HELPERS
-   ============================================================ */
-function getSettings(){
-  try{ return JSON.parse(localStorage.getItem(LS_SETTINGS))||{}; }catch(e){ return {}; }
-}
-function setSettings(obj){
-  const s = getSettings();
-  localStorage.setItem(LS_SETTINGS, JSON.stringify({...s,...obj}));
-}
-function getSettings2FA(){
-  return getSettings()['2fa']||null;
-}
-function setSettings2FA(code){
-  setSettings({'2fa': code ? fnv1a(code+SALT) : null});
-}
-function getBgSettings(){
-  try{ return JSON.parse(localStorage.getItem(LS_BG))||{url:'',dim:0.7}; }catch(e){ return {url:'',dim:0.7}; }
+function genId(){
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 }
 
-/* ============================================================
-   LOCKOUT
-   ============================================================ */
-let lockoutTimer = null;
-function getLockout(){ try{ return JSON.parse(localStorage.getItem('lv_lockout'))||null; }catch(e){ return null; } }
-function setLockout(obj){ localStorage.setItem('lv_lockout', JSON.stringify(obj)); }
-function clearLockout(){ localStorage.removeItem('lv_lockout'); }
-
-function checkLockout(){
-  const lk = getLockout();
-  if(!lk) return false;
-  const diff = Math.ceil((lk.until - Date.now())/1000);
-  if(diff <= 0){ clearLockout(); return false; }
-  showLockoutBanner(diff);
-  return true;
+function nowStr(){
+  return new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
 }
-function showLockoutBanner(secs){
+
+// =====================================================================
+// AUTH
+// =====================================================================
+let loginAttempts = 0;
+let lockoutUntil  = 0;
+let lockoutTimer  = null;
+
+function loadAuth(){
+  try{
+    const raw = localStorage.getItem(LS_AUTH);
+    if(raw){
+      const a = JSON.parse(raw);
+      loginAttempts = a.attempts  || 0;
+      lockoutUntil  = a.lockoutUntil || 0;
+    }
+  } catch(e){}
+}
+
+function saveAuth(){
+  localStorage.setItem(LS_AUTH, JSON.stringify({attempts:loginAttempts, lockoutUntil}));
+}
+
+function isLockedOut(){
+  return Date.now() < lockoutUntil;
+}
+
+function startLockoutCountdown(){
   const banner = document.getElementById('lockoutBanner');
-  const cd = document.getElementById('lockoutCountdown');
-  banner.style.display='flex';
-  cd.textContent = secs;
+  banner.style.display = 'flex';
   if(lockoutTimer) clearInterval(lockoutTimer);
-  let remaining = secs;
   lockoutTimer = setInterval(()=>{
-    remaining--;
-    if(remaining<=0){ clearInterval(lockoutTimer); banner.style.display='none'; clearLockout(); }
-    else{ cd.textContent=remaining; }
-  },1000);
-}
-
-/* ============================================================
-   AUTH
-   ============================================================ */
-function getValidHash(){
-  return localStorage.getItem(LS_PASS) || fnv1a(DEFAULT_PASS+SALT);
-}
-
-function checkAutoLogin(){
-  const rem = localStorage.getItem(LS_REMEMBER);
-  if(rem){
-    try{
-      const d = JSON.parse(rem);
-      if(d.user && d.hash){ initDashboard(d.user, d.hash); return; }
-    }catch(e){}
-  }
-  document.getElementById('loginPage').style.display='flex';
+    const remaining = Math.ceil((lockoutUntil - Date.now()) / 1000);
+    if(remaining <= 0){
+      clearInterval(lockoutTimer);
+      lockoutTimer = null;
+      banner.style.display = 'none';
+      loginAttempts = 0;
+      lockoutUntil  = 0;
+      saveAuth();
+    } else {
+      document.getElementById('lockoutCountdown').textContent = remaining;
+    }
+  }, 500);
 }
 
 function doLogin(){
-  if(checkLockout()) return;
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value;
-  const eu = document.getElementById('errUser');
-  const ep = document.getElementById('errPass');
-  const ea = document.getElementById('errAuth');
-  eu.classList.remove('show'); ep.classList.remove('show'); ea.classList.remove('show');
-  let ok = true;
-  if(!u){ eu.classList.add('show'); ok=false; }
-  if(!p){ ep.classList.add('show'); ok=false; }
-  if(!ok) return;
+  const userEl  = document.getElementById('loginUser');
+  const passEl  = document.getElementById('loginPass');
+  const errUser = document.getElementById('errUser');
+  const errPass = document.getElementById('errPass');
+  const errAuth = document.getElementById('errAuth');
 
-  if(u !== DEFAULT_USER){ ea.textContent='Username tidak dikenal.'; ea.classList.add('show'); recordFail(); return; }
-  const hash = fnv1a(p+SALT);
-  if(hash !== getValidHash()){ ea.textContent='Password salah.'; ea.classList.add('show'); recordFail(); return; }
+  errUser.classList.remove('show');
+  errPass.classList.remove('show');
+  errAuth.classList.remove('show');
 
-  // 2FA check
-  const twofa = getSettings2FA();
-  if(twofa){
-    const code = prompt('Masukkan kode 2FA Anda:');
-    if(!code){ return; }
-    if(fnv1a(code+SALT) !== twofa){ ea.textContent='Kode 2FA salah.'; ea.classList.add('show'); recordFail(); return; }
+  if(isLockedOut()){
+    startLockoutCountdown();
+    return;
   }
 
-  clearLockout();
-  localStorage.removeItem('lv_fails');
-  if(document.getElementById('rememberMe').checked){
-    localStorage.setItem(LS_REMEMBER, JSON.stringify({user:u, hash}));
-  } else {
-    localStorage.removeItem(LS_REMEMBER);
-  }
-  initDashboard(u, hash);
-}
+  const user = userEl.value.trim();
+  const pass = passEl.value;
+  let valid = true;
 
-function recordFail(){
-  let fails = parseInt(localStorage.getItem('lv_fails')||'0')+1;
-  localStorage.setItem('lv_fails', fails);
-  if(fails >= 5){
-    const until = Date.now() + 60000;
-    setLockout({until});
-    localStorage.removeItem('lv_fails');
-    showLockoutBanner(60);
+  if(!user){ errUser.classList.add('show'); valid = false; }
+  if(!pass){ errPass.classList.add('show'); valid = false; }
+  if(!valid) return;
+
+  const hash = fnv1a(pass + SALT);
+
+  if(user === 'angga11' && hash === getValidHash()){
+    loginAttempts = 0;
+    lockoutUntil  = 0;
+    saveAuth();
+    const remember = document.getElementById('rememberMe').checked;
+    sessionStorage.setItem('linkDashboardAuth_session', JSON.stringify({user, hash}));
+    if(remember){
+      localStorage.setItem('linkDashboardAuth_remember', JSON.stringify({user, hash}));
+    }
+    initDashboard(user, hash);
   } else {
-    const ea = document.getElementById('errAuth');
-    ea.textContent = (ea.textContent||'Password salah.') + ' ('+fails+'/5)';
-    ea.classList.add('show');
+    loginAttempts++;
+    if(loginAttempts >= 5){
+      lockoutUntil = Date.now() + 60000;
+      saveAuth();
+      errAuth.textContent = 'Terlalu banyak percobaan. Akun terkunci selama 60 detik.';
+      errAuth.classList.add('show');
+      startLockoutCountdown();
+    } else {
+      saveAuth();
+      errAuth.textContent = `Username atau password salah. Sisa percobaan: ${5 - loginAttempts}`;
+      errAuth.classList.add('show');
+    }
   }
 }
 
 function doLogout(){
-  localStorage.removeItem(LS_REMEMBER);
-  currentUser = null; currentHash = null;
-  document.getElementById('dashboardPage').style.display='none';
-  document.getElementById('loginPage').style.display='flex';
-  document.getElementById('loginPass').value='';
-  document.getElementById('loginUser').value='';
+  sessionStorage.removeItem('linkDashboardAuth_session');
+  localStorage.removeItem('linkDashboardAuth_remember');
+  twoFAVerified       = false;
+  pending2FACallback  = null;
+  document.getElementById('dashboardPage').style.display = 'none';
+  document.getElementById('loginPage').style.display     = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('rememberMe').checked = false;
 }
 
-/* ============================================================
-   INIT DASHBOARD  (Change 3: async + await loadData)
-   ============================================================ */
-async function initDashboard(user, hash){
-  currentUser = user; currentHash = hash;
-  document.getElementById('loginPage').style.display='none';
-  document.getElementById('dashboardPage').style.display='flex';
-  document.getElementById('sidebarUsername').textContent = user;
-  await loadData();
+function checkAutoLogin(){
+  try{
+    const sess = sessionStorage.getItem('linkDashboardAuth_session');
+    if(sess){
+      const {user, hash} = JSON.parse(sess);
+      if(user && hash){ initDashboard(user, hash); return; }
+    }
+    const rem = localStorage.getItem('linkDashboardAuth_remember');
+    if(rem){
+      const {user, hash} = JSON.parse(rem);
+      if(user && hash){ initDashboard(user, hash); return; }
+    }
+  } catch(e){}
+}
+
+// =====================================================================
+// 2FA STATE
+// =====================================================================
+let twoFAVerified      = false;
+let pending2FACallback = null;
+
+function require2FA(cb){
+  if(twoFAVerified){ cb(); return; }
+  document.getElementById('m2faCode').value = '';
+  document.getElementById('err2FA').classList.remove('show');
+  pending2FACallback = cb;
+  openModal('modal2FA');
+  setTimeout(()=>{ document.getElementById('m2faCode').focus(); }, 120);
+}
+
+function verify2FA(){
+  const input  = document.getElementById('m2faCode');
+  const errEl  = document.getElementById('err2FA');
+  const entered = input.value.trim();
+  const stored  = getSettings2FA();
+
+  if(entered === stored){
+    twoFAVerified = true;
+    closeModal('modal2FA');
+    errEl.classList.remove('show');
+    const cb = pending2FACallback;
+    pending2FACallback = null;
+    if(cb) cb();
+  } else {
+    errEl.classList.add('show');
+    input.value = '';
+    input.focus();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('m2faCode').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') verify2FA();
+  });
+});
+
+// =====================================================================
+// DASHBOARD INIT
+// =====================================================================
+let currentPage   = 'active';
+let currentFilter = 'all';
+let currentEditId = null;
+let currentUser   = '';
+let currentHash   = '';
+
+function initDashboard(user, hash){
+  currentUser = user;
+  currentHash = hash;
+  document.getElementById('loginPage').style.display     = 'none';
+  document.getElementById('dashboardPage').style.display = 'flex';
+  document.getElementById('sidebarUsername').textContent  = user;
+  document.getElementById('defaultWarnBanner').style.display = (hash === DEFAULT_HASH) ? 'flex' : 'none';
+  loadData();
   loadBg();
-  updateDefaultWarnBanner();
   switchPage('active');
 }
 
-function updateDefaultWarnBanner(){
-  const isDefault = (currentHash === fnv1a(DEFAULT_PASS+SALT));
-  document.getElementById('defaultWarnBanner').style.display = isDefault ? 'flex' : 'none';
-}
-
-/* ============================================================
-   NAVIGATION
-   ============================================================ */
 function switchPage(page){
-  currentPage = page;
-  activeFilter = 'Semua';
-  document.getElementById('searchInput').value='';
+  if(page === 'login' && !twoFAVerified){
+    require2FA(()=>{ switchPage('login'); });
+    return;
+  }
+
+  currentPage   = page;
+  currentFilter = 'all';
+  document.getElementById('searchInput').value = '';
+
   ['active','login','archived'].forEach(p=>{
-    document.getElementById('nav-'+p).classList.toggle('active', p===page);
+    const nav = document.getElementById('nav-'+p);
+    if(nav) nav.classList.toggle('active', p === page);
   });
-  const titles = {active:'Link Aktif', login:'Data Login', archived:'NAWALA'};
-  const subs   = {active:'Kelola semua link aktif Anda', login:'Simpan kredensial login', archived:'Link yang diarsipkan'};
-  const labels = {active:'Tambah Link', login:'Tambah Data Login', archived:'Tambah NAWALA'};
+
+  const titles    = {active:'Link Aktif', login:'Data Login Link Bio', archived:'NAWALA'};
+  const subs      = {active:'Kelola semua link aktif Anda', login:'Simpan data login platform link bio', archived:'Link yang telah diarsipkan'};
+  const addLabels = {active:'Tambah Link', login:'Tambah Data Login', archived:''};
+
   document.getElementById('pageTitle').textContent    = titles[page];
   document.getElementById('pageSubtitle').textContent = subs[page];
-  document.getElementById('btnAddLabel').textContent  = labels[page];
+  document.getElementById('btnAddLabel').textContent  = addLabels[page] || 'Tambah';
+  document.getElementById('btnAdd').style.display     = (page === 'archived') ? 'none' : 'flex';
+
   renderCurrentPage();
 }
 
-/* ============================================================
-   RENDER
-   ============================================================ */
 function renderCurrentPage(){
   updateBadges();
   renderStatTiles();
-  if(currentPage==='active')    renderActive();
-  else if(currentPage==='login') renderLogin();
-  else if(currentPage==='archived') renderArchived();
+  renderFilterChips();
+  renderList();
 }
 
 function updateBadges(){
@@ -689,557 +755,831 @@ function updateBadges(){
   document.getElementById('badge-archived').textContent = appData.archived.length;
 }
 
+// =====================================================================
+// CATEGORY CONFIG
+// =====================================================================
+const CAT_CONFIG = {
+  // active links
+  'LINK AMP':           {color:'#f59e0b', bg:'rgba(245,158,11,0.15)'},
+  'LINK DKWL & JALUR':  {color:'#10b981', bg:'rgba(16,185,129,0.15)'},
+  'LINK IP':            {color:'#3b82f6', bg:'rgba(59,130,246,0.15)'},
+  'LINK LANDINGPAGE':   {color:'#8b5cf6', bg:'rgba(139,92,246,0.15)'},
+  'DOMAIN IT':          {color:'#06b6d4', bg:'rgba(6,182,212,0.15)'},
+  'FUSION X':           {color:'#f43f5e', bg:'rgba(244,63,94,0.15)'},
+  'DOMAIN CADANGAN':    {color:'#a78bfa', bg:'rgba(167,139,250,0.15)'},
+  'LINK DOWNLOAD APK':  {color:'#22c55e', bg:'rgba(34,197,94,0.15)'},
+  'LINK KEPALA 3':      {color:'#fb923c', bg:'rgba(251,146,60,0.15)'},
+  'LINK KEPALA 8':      {color:'#e879f9', bg:'rgba(232,121,249,0.15)'},
+  'LINK TANAM PROMOSI': {color:'#fbbf24', bg:'rgba(251,191,36,0.15)'},
+  'LINK DIRECT BLOG':   {color:'#34d399', bg:'rgba(52,211,153,0.15)'},
+  'LINK TANAM APK':     {color:'#60a5fa', bg:'rgba(96,165,250,0.15)'},
+  'CANONICAL':          {color:'#f472b6', bg:'rgba(244,114,182,0.15)'},
+  // login data
+  'DATA LOGIN LINK-LIST':     {color:'#a78bfa', bg:'rgba(167,139,250,0.15)'},
+  'DATA LOGIN HEYLINK':       {color:'#38bdf8', bg:'rgba(56,189,248,0.15)'},
+  'DATA LOGIN MEZINK':        {color:'#4ade80', bg:'rgba(74,222,128,0.15)'},
+  'DATA LOGIN LINKLIT':       {color:'#fb7185', bg:'rgba(251,113,133,0.15)'},
+  'DATA LOGIN DESTYPAGE':     {color:'#fcd34d', bg:'rgba(252,211,77,0.15)'},
+  'DATA LOGIN OFFICIAL.LINK': {color:'#67e8f9', bg:'rgba(103,232,249,0.15)'},
+  'DATA LOGIN BIO-LINK':      {color:'#c4b5fd', bg:'rgba(196,181,253,0.15)'},
+  // archived
+  'Social Media':  {color:'#60a5fa', bg:'rgba(96,165,250,0.15)'},
+  'Link Bio':      {color:'#34d399', bg:'rgba(52,211,153,0.15)'},
+  'Blog':          {color:'#fbbf24', bg:'rgba(251,191,36,0.15)'},
+  'Landing Page':  {color:'#f472b6', bg:'rgba(244,114,182,0.15)'},
+  'E-Commerce':    {color:'#a78bfa', bg:'rgba(167,139,250,0.15)'},
+  'Portfolio':     {color:'#38bdf8', bg:'rgba(56,189,248,0.15)'},
+  // default
+  'Lainnya':       {color:'#8888aa', bg:'rgba(136,136,170,0.15)'},
+};
+
+function getCatCfg(cat){
+  return CAT_CONFIG[cat] || {color:'#8888aa', bg:'rgba(136,136,170,0.15)'};
+}
+
+// =====================================================================
+// SVG ICONS (inline)
+// =====================================================================
+function iconSvg(name){
+  const icons = {
+    link:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
+    edit:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+    trash:  `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`,
+    copy:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+    restore:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.48"/></svg>`,
+    archive:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>`,
+    eye:    `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+    open:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+    key:    `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
+    chevron:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
+  };
+  return icons[name] || '';
+}
+
+// =====================================================================
+// STAT TILES
+// =====================================================================
 function renderStatTiles(){
-  const el = document.getElementById('statTiles');
-  if(currentPage==='active'){
-    const cats = [...new Set(appData.links.map(l=>l.category||'Umum'))];
-    el.innerHTML = `
-      <div class="stat-tile"><div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;">Total Link</div><div style="font-size:28px;font-weight:700;color:#a78bfa;">${appData.links.length}</div></div>
-      <div class="stat-tile"><div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;">Kategori</div><div style="font-size:28px;font-weight:700;color:#a78bfa;">${cats.length}</div></div>
-      <div class="stat-tile"><div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;">Diarsipkan</div><div style="font-size:28px;font-weight:700;color:#a78bfa;">${appData.archived.length}</div></div>`;
-  } else if(currentPage==='login'){
-    el.innerHTML = `
-      <div class="stat-tile"><div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;">Total Login</div><div style="font-size:28px;font-weight:700;color:#a78bfa;">${appData.loginData.length}</div></div>
-      <div class="stat-tile"></div><div class="stat-tile"></div>`;
+  const container = document.getElementById('statTiles');
+  if(!container) return;
+
+  if(currentPage === 'active'){
+    const cats = {};
+    appData.links.forEach(l=>{ cats[l.category] = (cats[l.category]||0)+1; });
+    const topCat = Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+    container.innerHTML = `
+      <div class="stat-tile">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Total Link</div>
+        <div style="font-size:32px;font-weight:700;color:#a78bfa;">${appData.links.length}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Link aktif tersimpan</div>
+      </div>
+      <div class="stat-tile">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Kategori</div>
+        <div style="font-size:32px;font-weight:700;color:#38bdf8;">${Object.keys(cats).length}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Kategori berbeda</div>
+      </div>
+      <div class="stat-tile">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Terbanyak</div>
+        <div style="font-size:20px;font-weight:700;color:#4ade80;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${topCat ? escHtml(topCat[0]) : '-'}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">${topCat ? topCat[1]+' link' : 'Belum ada data'}</div>
+      </div>`;
+  } else if(currentPage === 'login'){
+    const cats = {};
+    appData.loginData.forEach(l=>{ cats[l.category] = (cats[l.category]||0)+1; });
+    container.innerHTML = `
+      <div class="stat-tile">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Total Akun</div>
+        <div style="font-size:32px;font-weight:700;color:#a78bfa;">${appData.loginData.length}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Data login tersimpan</div>
+      </div>
+      <div class="stat-tile">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Platform</div>
+        <div style="font-size:32px;font-weight:700;color:#38bdf8;">${Object.keys(cats).length}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Kategori berbeda</div>
+      </div>
+      <div class="stat-tile">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Link Terkait</div>
+        <div style="font-size:32px;font-weight:700;color:#4ade80;">${appData.loginData.filter(l=>l.relatedLinkId).length}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Akun punya link terkait</div>
+      </div>`;
   } else {
-    el.innerHTML = `
-      <div class="stat-tile"><div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;">Total NAWALA</div><div style="font-size:28px;font-weight:700;color:#a78bfa;">${appData.archived.length}</div></div>
-      <div class="stat-tile"></div><div class="stat-tile"></div>`;
+    container.innerHTML = `
+      <div class="stat-tile">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Diarsipkan</div>
+        <div style="font-size:32px;font-weight:700;color:#a78bfa;">${appData.archived.length}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Link tersimpan di arsip</div>
+      </div>
+      <div class="stat-tile">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Aktif</div>
+        <div style="font-size:32px;font-weight:700;color:#38bdf8;">${appData.links.length}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Link aktif saat ini</div>
+      </div>
+      <div class="stat-tile">
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Total</div>
+        <div style="font-size:32px;font-weight:700;color:#4ade80;">${appData.links.length + appData.archived.length}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Semua link</div>
+      </div>`;
   }
 }
 
-/* --- Active Links --- */
-function renderActive(){
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const cats = [...new Set(appData.links.map(l=>l.category||'Umum'))].sort();
-  const chips = document.getElementById('filterChips');
-  chips.innerHTML = ['Semua',...cats].map(c=>`<div class="chip${activeFilter===c?' active':''}" onclick="setFilter('${c}')">${c}</div>`).join('');
+// =====================================================================
+// FILTER CHIPS
+// =====================================================================
+function renderFilterChips(){
+  const container = document.getElementById('filterChips');
+  if(!container) return;
+  const arr = getSourceArr();
+  const cats = {};
+  arr.forEach(item=>{
+    const c = item.category || 'Lainnya';
+    cats[c] = (cats[c]||0)+1;
+  });
 
-  let items = appData.links;
-  if(activeFilter !== 'Semua') items = items.filter(l=>(l.category||'Umum')===activeFilter);
-  if(q) items = items.filter(l=>(l.name+l.url+(l.description||'')).toLowerCase().includes(q));
-
-  const cl = document.getElementById('contentList');
-  if(!items.length){ cl.innerHTML=`<div class="empty-state"><div style="font-size:40px;margin-bottom:12px;">🔗</div><div style="font-weight:600;margin-bottom:6px;">Belum ada link</div><div style="font-size:13px;">Klik "Tambah Link" untuk memulai.</div></div>`; return; }
-
-  const byCat = {};
-  items.forEach(l=>{ const c=l.category||'Umum'; (byCat[c]=byCat[c]||[]).push(l); });
-  cl.innerHTML = Object.entries(byCat).map(([cat,links])=>`
-    <div class="cat-group">
-      <div class="cat-header" onclick="toggleCat(this)">
-        <div class="cat-icon" style="background:var(--accent-soft);">📁</div>
-        <div class="cat-name">${esc(cat)}</div>
-        <div class="cat-count">${links.length} link</div>
-        <svg class="cat-chevron open" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-      <div class="cat-body open">
-        ${links.map(l=>linkItemHTML(l)).join('')}
-      </div>
-    </div>`).join('');
+  let html = `<span class="chip${currentFilter==='all'?' active':''}" onclick="setFilter('all')">Semua (${arr.length})</span>`;
+  Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([cat,count])=>{
+    const active = currentFilter===cat?' active':'';
+    html += `<span class="chip${active}" onclick="setFilter('${escHtml(cat)}')">${escHtml(cat)} (${count})</span>`;
+  });
+  container.innerHTML = html;
 }
 
-function linkItemHTML(l){
-  const icon = l.icon||'🔗';
-  return `<div class="link-item">
-    <div class="link-favicon">${esc(icon)}</div>
-    <div class="link-info">
-      <div class="link-name">${esc(l.name)}</div>
-      <div class="link-url">${esc(l.url)}</div>
-      ${l.description?`<div class="link-desc">${esc(l.description)}</div>`:''}
-    </div>
-    <div class="link-actions">
-      <a href="${esc(l.url)}" target="_blank" rel="noopener" class="btn btn-secondary btn-icon btn-sm" title="Buka">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      </a>
-      <button class="btn btn-secondary btn-icon btn-sm" onclick="openEditLink('${l.id}')" title="Edit">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </button>
-      <button class="btn btn-secondary btn-icon btn-sm" onclick="confirmArchive('${l.id}')" title="Arsipkan">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-      </button>
-      <button class="btn btn-danger btn-icon btn-sm" onclick="confirmDelete('${l.id}','link')" title="Hapus">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-      </button>
-    </div>
-  </div>`;
-}
-
-/* --- Login Data --- */
-function renderLogin(){
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  document.getElementById('filterChips').innerHTML='';
-  let items = appData.loginData;
-  if(q) items = items.filter(l=>(l.name+(l.username||')+(l.url||')).toLowerCase().includes(q));
-  const cl = document.getElementById('contentList');
-  if(!items.length){ cl.innerHTML=`<div class="empty-state"><div style="font-size:40px;margin-bottom:12px;">🔐</div><div style="font-weight:600;margin-bottom:6px;">Belum ada data login</div></div>`; return; }
-  cl.innerHTML=items.map(l=>loginItemHTML(l)).join('');
-}
-
-function loginItemHTML(l){
-  return `<div class="link-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;">
-    <div class="link-favicon">🔐</div>
-    <div class="link-info">
-      <div class="link-name">${esc(l.name)}</div>
-      ${l.url?`<div class="link-url">${esc(l.url)}</div>`:''}
-      ${l.username?`<div class="link-desc">👤 ${esc(l.username)}</div>`:''}
-      ${l.note?`<div class="link-desc">📝 ${esc(l.note)}</div>`:''}
-    </div>
-    <div class="link-actions">
-      ${l.url?`<a href="${esc(l.url)}" target="_blank" rel="noopener" class="btn btn-secondary btn-icon btn-sm"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`:''}
-      <button class="btn btn-secondary btn-icon btn-sm" onclick="openEditLogin('${l.id}')">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </button>
-      <button class="btn btn-danger btn-icon btn-sm" onclick="confirmDelete('${l.id}','loginData')">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-      </button>
-    </div>
-  </div>`;
-}
-
-/* --- Archived --- */
-function renderArchived(){
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  document.getElementById('filterChips').innerHTML='';
-  let items = appData.archived;
-  if(q) items = items.filter(l=>(l.name+(l.url||')+(l.description||')).toLowerCase().includes(q));
-  const cl = document.getElementById('contentList');
-  if(!items.length){ cl.innerHTML=`<div class="empty-state"><div style="font-size:40px;margin-bottom:12px;">📦</div><div style="font-weight:600;margin-bottom:6px;">Belum ada NAWALA</div></div>`; return; }
-  cl.innerHTML=items.map(l=>archivedItemHTML(l)).join('');
-}
-
-function archivedItemHTML(l){
-  return `<div class="link-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;opacity:0.85;">
-    <div class="link-favicon">📦</div>
-    <div class="link-info">
-      <div class="link-name">${esc(l.name)}</div>
-      ${l.url?`<div class="link-url">${esc(l.url)}</div>`:''}
-      ${l.description?`<div class="link-desc">${esc(l.description)}</div>`:''}
-      ${l.archivedAt?`<div class="link-desc" style="font-size:10px;color:var(--text-secondary);">Diarsipkan: ${new Date(l.archivedAt).toLocaleString('id-ID')}</div>`:''}
-    </div>
-    <div class="link-actions">
-      ${l.url?`<a href="${esc(l.url)}" target="_blank" rel="noopener" class="btn btn-secondary btn-icon btn-sm"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`:''}
-      <button class="btn btn-secondary btn-icon btn-sm" onclick="openEditArchived('${l.id}')" title="Edit">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </button>
-      <button class="btn btn-secondary btn-icon btn-sm" onclick="confirmRestore('${l.id}')" title="Pulihkan">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
-      </button>
-      <button class="btn btn-danger btn-icon btn-sm" onclick="confirmDelete('${l.id}','archived')" title="Hapus">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-      </button>
-    </div>
-  </div>`;
-}
-
-/* ============================================================
-   FILTER / SEARCH
-   ============================================================ */
 function setFilter(cat){
-  activeFilter = cat;
-  renderCurrentPage();
+  currentFilter = cat;
+  renderFilterChips();
+  renderList();
 }
 
-function toggleCat(header){
-  const body    = header.nextElementSibling;
-  const chevron = header.querySelector('.cat-chevron');
+function getSourceArr(){
+  if(currentPage==='active')   return appData.links;
+  if(currentPage==='login')    return appData.loginData;
+  if(currentPage==='archived') return appData.archived;
+  return [];
+}
+
+function getFilteredArr(){
+  let arr = getSourceArr();
+  if(currentFilter !== 'all'){
+    arr = arr.filter(item=>(item.category||'Lainnya')===currentFilter);
+  }
+  const q = (document.getElementById('searchInput')?.value||'').trim().toLowerCase();
+  if(q){
+    arr = arr.filter(item=>{
+      const name = (item.name||item.platform||'').toLowerCase();
+      const url  = (item.url||'').toLowerCase();
+      const desc = (item.description||item.notes||'').toLowerCase();
+      const cat  = (item.category||'').toLowerCase();
+      const user = (item.loginUsername||'').toLowerCase();
+      return name.includes(q)||url.includes(q)||desc.includes(q)||cat.includes(q)||user.includes(q);
+    });
+  }
+  return arr;
+}
+
+// =====================================================================
+// RENDER LIST
+// =====================================================================
+function renderList(){
+  const container = document.getElementById('contentList');
+  if(!container) return;
+  const arr = getFilteredArr();
+
+  if(arr.length === 0){
+    container.innerHTML = `<div class="empty-state">
+      <div style="width:56px;height:56px;border-radius:16px;background:var(--bg-elevated);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">${iconSvg('link')}</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:6px;">Belum ada data</div>
+      <div style="font-size:13px;">Klik tombol tambah untuk menambahkan data baru.</div>
+    </div>`;
+    return;
+  }
+
+  // Group by category
+  const groups = {};
+  arr.forEach(item=>{
+    const cat = item.category || 'Lainnya';
+    if(!groups[cat]) groups[cat] = [];
+    groups[cat].push(item);
+  });
+
+  let html = '';
+  Object.entries(groups).forEach(([cat, items])=>{
+    const cfg   = getCatCfg(cat);
+    const gid   = 'g_' + btoa(encodeURIComponent(cat)).replace(/=/g,'');
+    html += `<div class="cat-group">
+      <div class="cat-header" onclick="toggleGroup('${gid}')">
+        <div class="cat-icon" style="background:${cfg.bg};color:${cfg.color};">${iconSvg('link')}</div>
+        <span class="cat-name">${escHtml(cat)}</span>
+        <span class="cat-count">${items.length} item</span>
+        <span class="cat-chevron open" id="chev_${gid}">${iconSvg('chevron')}</span>
+      </div>
+      <div class="cat-body open" id="${gid}">`;
+    items.forEach(item=>{
+      html += renderItem(item, currentPage);
+    });
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleGroup(gid){
+  const body = document.getElementById(gid);
+  const chev = document.getElementById('chev_'+gid);
+  if(!body) return;
   body.classList.toggle('open');
-  chevron.classList.toggle('open');
+  if(chev) chev.classList.toggle('open', body.classList.contains('open'));
 }
 
-/* ============================================================
-   MODAL HELPERS
-   ============================================================ */
-function openModal(id){ document.getElementById(id).classList.add('open'); }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function renderItem(item, type){
+  const cfg = getCatCfg(item.category||'Lainnya');
+  let actionsHtml = '';
 
-/* ============================================================
-   ADD / EDIT LINK
-   ============================================================ */
+  if(type === 'active'){
+    actionsHtml = `
+      <button class="btn btn-icon btn-secondary btn-sm" title="Salin URL" onclick='copyField("${escHtml(item.url)}")'>` + iconSvg('copy') + `</button>
+      <button class="btn btn-icon btn-secondary btn-sm" title="Buka URL" onclick='window.open("${escHtml(item.url)}","_blank")'>` + iconSvg('open') + `</button>
+      <button class="btn btn-icon btn-secondary btn-sm" title="Edit" onclick='openEditLink("${item.id}")'>` + iconSvg('edit') + `</button>
+      <button class="btn btn-icon btn-secondary btn-sm" title="Arsipkan" onclick='confirmArchive("${item.id}")'>` + iconSvg('archive') + `</button>
+      <button class="btn btn-icon btn-danger btn-sm" title="Hapus" onclick='confirmDelete("${item.id}","active")'>` + iconSvg('trash') + `</button>`;
+    return `<div class="link-item">
+      <div class="link-favicon" style="background:${cfg.bg};color:${cfg.color};">${iconSvg('link')}</div>
+      <div class="link-info">
+        <div class="link-name">${escHtml(item.name)}</div>
+        <div class="link-url">${escHtml(item.url)}</div>
+        ${item.description ? `<div class="link-desc">${escHtml(item.description)}</div>` : ''}
+      </div>
+      <div class="link-actions">${actionsHtml}</div>
+    </div>`;
+  }
+
+  if(type === 'login'){
+    const relatedLink = appData.links.find(l=>l.id===item.relatedLinkId);
+    actionsHtml = `
+      <button class="btn btn-icon btn-secondary btn-sm" title="Salin Username" onclick='copyField("${escHtml(item.loginUsername)}")'>` + iconSvg('copy') + `</button>
+      <button class="btn btn-icon btn-secondary btn-sm" title="Salin Password" onclick='copyField("${escHtml(item.loginPassword)}")'>` + iconSvg('key') + `</button>
+      ${item.url ? `<button class="btn btn-icon btn-secondary btn-sm" title="Buka URL" onclick='window.open("${escHtml(item.url)}","_blank")'>${iconSvg('open')}</button>` : ''}
+      <button class="btn btn-icon btn-secondary btn-sm" title="Edit" onclick='openEditLogin("${item.id}")'>` + iconSvg('edit') + `</button>
+      <button class="btn btn-icon btn-danger btn-sm" title="Hapus" onclick='confirmDelete("${item.id}","login")'>` + iconSvg('trash') + `</button>`;
+    return `<div class="link-item">
+      <div class="link-favicon" style="background:${cfg.bg};color:${cfg.color};">${iconSvg('key')}</div>
+      <div class="link-info">
+        <div class="link-name">${escHtml(item.platform)}</div>
+        <div class="link-url">${escHtml(item.loginUsername||'')}${item.url?' — '+escHtml(item.url):''}</div>
+        ${relatedLink ? `<div class="link-desc">Terkait: ${escHtml(relatedLink.name)}</div>` : ''}
+        ${item.notes ? `<div class="link-desc">${escHtml(item.notes)}</div>` : ''}
+      </div>
+      <div class="link-actions">${actionsHtml}</div>
+    </div>`;
+  }
+
+  if(type === 'archived'){
+    actionsHtml = `
+      <button class="btn btn-icon btn-secondary btn-sm" title="Pulihkan" onclick='confirmRestore("${item.id}")'>` + iconSvg('restore') + `</button>
+      <button class="btn btn-icon btn-secondary btn-sm" title="Edit" onclick='openEditArchived("${item.id}")'>` + iconSvg('edit') + `</button>
+      <button class="btn btn-icon btn-danger btn-sm" title="Hapus Permanen" onclick='confirmDelete("${item.id}","archived")'>` + iconSvg('trash') + `</button>`;
+    return `<div class="link-item">
+      <div class="link-favicon" style="background:${cfg.bg};color:${cfg.color};opacity:0.7;">${iconSvg('archive')}</div>
+      <div class="link-info">
+        <div class="link-name" style="opacity:0.7;">${escHtml(item.name)}</div>
+        <div class="link-url">${escHtml(item.url)}</div>
+        ${item.description ? `<div class="link-desc">${escHtml(item.description)}</div>` : ''}
+      </div>
+      <div class="link-actions">${actionsHtml}</div>
+    </div>`;
+  }
+
+  return '';
+}
+
+// =====================================================================
+// COPY FIELD
+// =====================================================================
+function copyField(val){
+  if(!val) return;
+  navigator.clipboard.writeText(val).then(()=>{
+    showToast({message:'Disalin ke clipboard', type:'success'});
+  }).catch(()=>{
+    showToast({message:'Gagal menyalin', type:'error'});
+  });
+}
+
+// =====================================================================
+// MODAL HELPERS
+// =====================================================================
+function openModal(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.add('open');
+}
+function closeModal(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.remove('open');
+}
+
+function checkCustomCat(selectId, customWrapId){
+  const sel  = document.getElementById(selectId);
+  const wrap = document.getElementById(customWrapId + 'Wrap');
+  if(!sel || !wrap) return;
+  wrap.style.display = (sel.value === '__custom__') ? 'block' : 'none';
+}
+
+function resolveCategory(selectId, customId){
+  const sel = document.getElementById(selectId);
+  if(!sel) return '';
+  if(sel.value === '__custom__'){
+    return (document.getElementById(customId)?.value||'').trim() || 'Lainnya';
+  }
+  return sel.value || 'Lainnya';
+}
+
+function setSelectValue(selectId, value){
+  const sel = document.getElementById(selectId);
+  if(!sel) return;
+  // Check if option exists
+  const exists = Array.from(sel.options).some(o=>o.value===value||o.text===value);
+  if(exists){
+    sel.value = value;
+  } else {
+    // Add custom option
+    const opt = document.createElement('option');
+    opt.value = value;
+    opt.textContent = value;
+    // Insert before last option (+ Kategori Baru)
+    const lastOpt = sel.querySelector('option[value="__custom__"]');
+    if(lastOpt) sel.insertBefore(opt, lastOpt);
+    sel.value = value;
+  }
+}
+
+// =====================================================================
+// ADD/EDIT LINK (active)
+// =====================================================================
 function openAddModal(){
-  editingId   = null;
-  editingType = currentPage;
-  if(currentPage==='active')    openAddLink();
-  else if(currentPage==='login') openAddLogin();
-  else                           openAddArchived();
+  if(currentPage === 'active'){
+    openAddLinkModal();
+  } else if(currentPage === 'login'){
+    openAddLoginModal();
+  }
 }
 
-function openAddLink(){
-  document.getElementById('modalLinkTitle').textContent='Tambah Link';
-  ['fLinkName','fLinkUrl','fLinkCat','fLinkDesc','fLinkIcon'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('errLinkName').classList.remove('show');
-  document.getElementById('errLinkUrl').classList.remove('show');
+function openAddLinkModal(){
+  currentEditId = null;
+  document.getElementById('modalLinkTitle').textContent = 'Tambah Link Baru';
+  document.getElementById('mLinkName').value  = '';
+  document.getElementById('mLinkUrl').value   = '';
+  document.getElementById('mLinkCat').value   = '';
+  document.getElementById('mLinkDesc').value  = '';
+  document.getElementById('mLinkCatCustomWrap').style.display = 'none';
   openModal('modalLink');
 }
 
 function openEditLink(id){
-  const l = appData.links.find(x=>x.id===id);
-  if(!l) return;
-  editingId = id;
-  document.getElementById('modalLinkTitle').textContent='Edit Link';
-  document.getElementById('fLinkName').value = l.name||'';
-  document.getElementById('fLinkUrl').value  = l.url||'';
-  document.getElementById('fLinkCat').value  = l.category||'';
-  document.getElementById('fLinkDesc').value = l.description||'';
-  document.getElementById('fLinkIcon').value = l.icon||'';
-  document.getElementById('errLinkName').classList.remove('show');
-  document.getElementById('errLinkUrl').classList.remove('show');
+  const item = appData.links.find(l=>l.id===id);
+  if(!item) return;
+  currentEditId = id;
+  document.getElementById('modalLinkTitle').textContent = 'Edit Link';
+  document.getElementById('mLinkName').value = item.name||'';
+  document.getElementById('mLinkUrl').value  = item.url||'';
+  setSelectValue('mLinkCat', item.category||'');
+  document.getElementById('mLinkCatCustomWrap').style.display = 'none';
+  document.getElementById('mLinkDesc').value = item.description||'';
   openModal('modalLink');
 }
 
-async function saveLink(){
-  const name = document.getElementById('fLinkName').value.trim();
-  const url  = document.getElementById('fLinkUrl').value.trim();
-  let ok = true;
-  if(!name){ document.getElementById('errLinkName').classList.add('show'); ok=false; } else document.getElementById('errLinkName').classList.remove('show');
-  if(!url){  document.getElementById('errLinkUrl').classList.add('show');  ok=false; } else document.getElementById('errLinkUrl').classList.remove('show');
-  if(!ok) return;
-  const obj = {
-    name, url,
-    category:    document.getElementById('fLinkCat').value.trim()||'Umum',
-    description: document.getElementById('fLinkDesc').value.trim(),
-    icon:        document.getElementById('fLinkIcon').value.trim()||'🔗',
-    updatedAt:   nowStr()
-  };
-  if(editingId){
-    const idx = appData.links.findIndex(x=>x.id===editingId);
-    if(idx>-1) appData.links[idx] = {...appData.links[idx], ...obj};
+function saveLink(){
+  const name = document.getElementById('mLinkName').value.trim();
+  const url  = document.getElementById('mLinkUrl').value.trim();
+  const cat  = resolveCategory('mLinkCat','mLinkCatCustom');
+  const desc = document.getElementById('mLinkDesc').value.trim();
+
+  if(!name){ showToast({message:'Nama link wajib diisi',type:'error'}); return; }
+  if(!url)  { showToast({message:'URL wajib diisi',type:'error'}); return; }
+  if(!cat || cat==='-- Pilih Kategori --'){ showToast({message:'Pilih kategori',type:'error'}); return; }
+
+  if(currentEditId){
+    const idx = appData.links.findIndex(l=>l.id===currentEditId);
+    if(idx >= 0){
+      appData.links[idx] = {...appData.links[idx], name, url, category:cat, description:desc, updatedAt:nowStr()};
+      showToast({message:'Link berhasil diperbarui',type:'success'});
+    }
   } else {
-    appData.links.push({id:uid(), createdAt:nowStr(), ...obj});
+    appData.links.push({id:genId(), name, url, category:cat, description:desc, createdAt:nowStr(), updatedAt:nowStr()});
+    showToast({message:'Link berhasil ditambahkan',type:'success'});
   }
-  await saveData();
+  saveData();
   closeModal('modalLink');
   renderCurrentPage();
-  showToast({message: editingId?'Link diperbarui':'Link ditambahkan', type:'success'});
-  editingId=null;
 }
 
-/* ============================================================
-   ADD / EDIT LOGIN
-   ============================================================ */
-function openAddLogin(){
-  document.getElementById('modalLoginTitle').textContent='Tambah Data Login';
-  ['fLoginName','fLoginUrl','fLoginUser','fLoginPass','fLoginNote'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('errLoginName').classList.remove('show');
+// =====================================================================
+// ADD/EDIT LOGIN DATA
+// =====================================================================
+function openAddLoginModal(){
+  currentEditId = null;
+  document.getElementById('modalLoginTitle').textContent = 'Tambah Data Login';
+  document.getElementById('mLdPlatform').value  = '';
+  document.getElementById('mLdCat').value       = '';
+  document.getElementById('mLdUrl').value       = '';
+  document.getElementById('mLdUsername').value  = '';
+  document.getElementById('mLdPassword').value  = '';
+  document.getElementById('mLdNotes').value     = '';
+  document.getElementById('mLdCatCustomWrap').style.display = 'none';
+  populateRelatedLinks('');
   openModal('modalLogin');
 }
 
 function openEditLogin(id){
-  const l = appData.loginData.find(x=>x.id===id);
-  if(!l) return;
-  editingId = id;
-  document.getElementById('modalLoginTitle').textContent='Edit Data Login';
-  document.getElementById('fLoginName').value = l.name||'';
-  document.getElementById('fLoginUrl').value  = l.url||'';
-  document.getElementById('fLoginUser').value = l.username||'';
-  document.getElementById('fLoginPass').value = l.password||'';
-  document.getElementById('fLoginNote').value = l.note||'';
-  document.getElementById('errLoginName').classList.remove('show');
+  const item = appData.loginData.find(l=>l.id===id);
+  if(!item) return;
+  currentEditId = id;
+  document.getElementById('modalLoginTitle').textContent = 'Edit Data Login';
+  document.getElementById('mLdPlatform').value = item.platform||'';
+  setSelectValue('mLdCat', item.category||'');
+  document.getElementById('mLdCatCustomWrap').style.display = 'none';
+  document.getElementById('mLdUrl').value      = item.url||'';
+  document.getElementById('mLdUsername').value = item.loginUsername||'';
+  document.getElementById('mLdPassword').value = item.loginPassword||'';
+  document.getElementById('mLdNotes').value    = item.notes||'';
+  populateRelatedLinks(item.relatedLinkId||'');
   openModal('modalLogin');
 }
 
-async function saveLoginItem(){
-  const name = document.getElementById('fLoginName').value.trim();
-  if(!name){ document.getElementById('errLoginName').classList.add('show'); return; }
-  document.getElementById('errLoginName').classList.remove('show');
-  const obj = {
-    name,
-    url:       document.getElementById('fLoginUrl').value.trim(),
-    username:  document.getElementById('fLoginUser').value.trim(),
-    password:  document.getElementById('fLoginPass').value,
-    note:      document.getElementById('fLoginNote').value.trim(),
-    updatedAt: nowStr()
-  };
-  if(editingId){
-    const idx = appData.loginData.findIndex(x=>x.id===editingId);
-    if(idx>-1) appData.loginData[idx] = {...appData.loginData[idx], ...obj};
+function populateRelatedLinks(selectedId){
+  const sel = document.getElementById('mLdRelated');
+  if(!sel) return;
+  sel.innerHTML = '<option value="">-- Tidak ada --</option>';
+  appData.links.forEach(l=>{
+    const opt = document.createElement('option');
+    opt.value = l.id;
+    opt.textContent = l.name + ' (' + l.url + ')';
+    if(l.id === selectedId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function saveLoginData(){
+  const platform = document.getElementById('mLdPlatform').value.trim();
+  const cat      = resolveCategory('mLdCat','mLdCatCustom');
+  const url      = document.getElementById('mLdUrl').value.trim();
+  const username = document.getElementById('mLdUsername').value.trim();
+  const password = document.getElementById('mLdPassword').value;
+  const notes    = document.getElementById('mLdNotes').value.trim();
+  const related  = document.getElementById('mLdRelated').value;
+
+  if(!platform){ showToast({message:'Nama platform wajib diisi',type:'error'}); return; }
+
+  if(currentEditId){
+    const idx = appData.loginData.findIndex(l=>l.id===currentEditId);
+    if(idx >= 0){
+      appData.loginData[idx] = {...appData.loginData[idx], platform, category:cat, url, loginUsername:username, loginPassword:password, notes, relatedLinkId:related, updatedAt:nowStr()};
+      showToast({message:'Data login berhasil diperbarui',type:'success'});
+    }
   } else {
-    appData.loginData.push({id:uid(), createdAt:nowStr(), ...obj});
+    appData.loginData.push({id:genId(), platform, category:cat, url, loginUsername:username, loginPassword:password, notes, relatedLinkId:related, createdAt:nowStr(), updatedAt:nowStr()});
+    showToast({message:'Data login berhasil ditambahkan',type:'success'});
   }
-  await saveData();
+  saveData();
   closeModal('modalLogin');
   renderCurrentPage();
-  showToast({message: editingId?'Data login diperbarui':'Data login ditambahkan', type:'success'});
-  editingId=null;
 }
 
-/* ============================================================
-   ADD / EDIT ARCHIVED  (Change 4 — complete implementation)
-   ============================================================ */
-function openAddArchived(){
-  editingId = null;
-  document.getElementById('modalArchivedTitle').textContent='Tambah NAWALA';
-  ['fArcName','fArcUrl','fArcCat','fArcDesc'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('errArcName').classList.remove('show');
-  openModal('modalArchived');
-}
-
+// =====================================================================
+// EDIT ARCHIVED
+// =====================================================================
 function openEditArchived(id){
-  const l = appData.archived.find(x=>x.id===id);
-  if(!l) return;
-  editingId = id;
-  document.getElementById('modalArchivedTitle').textContent='Edit NAWALA';
-  document.getElementById('fArcName').value = l.name||'';
-  document.getElementById('fArcUrl').value  = l.url||'';
-  document.getElementById('fArcCat').value  = l.category||'';
-  document.getElementById('fArcDesc').value = l.description||'';
-  document.getElementById('errArcName').classList.remove('show');
+  const item = appData.archived.find(l=>l.id===id);
+  if(!item) return;
+  currentEditId = id;
+  document.getElementById('mArcName').value = item.name||'';
+  document.getElementById('mArcUrl').value  = item.url||'';
+  setSelectValue('mArcCat', item.category||'');
+  document.getElementById('mArcCatCustomWrap').style.display = 'none';
+  document.getElementById('mArcDesc').value = item.description||'';
   openModal('modalArchived');
 }
 
-async function saveArchiveEdit(){
-  const name = document.getElementById('fArcName').value.trim();
-  if(!name){ document.getElementById('errArcName').classList.add('show'); return; }
-  document.getElementById('errArcName').classList.remove('show');
-  const obj = {
-    name,
-    url:         document.getElementById('fArcUrl').value.trim(),
-    category:    document.getElementById('fArcCat').value.trim()||'Umum',
-    description: document.getElementById('fArcDesc').value.trim(),
-    updatedAt:   nowStr()
-  };
-  if(editingId){
-    const idx = appData.archived.findIndex(x=>x.id===editingId);
-    if(idx>-1) appData.archived[idx] = {...appData.archived[idx], ...obj};
-  } else {
-    appData.archived.push({id:uid(), createdAt:nowStr(), archivedAt:nowStr(), ...obj});
+function saveArchiveEdit(){
+  const name = document.getElementById('mArcName').value.trim();
+  const url  = document.getElementById('mArcUrl').value.trim();
+  const cat  = resolveCategory('mArcCat','mArcCatCustom');
+  const desc = document.getElementById('mArcDesc').value.trim();
+
+  if(!name){ showToast({message:'Nama link wajib diisi',type:'error'}); return; }
+
+  const idx = appData.archived.findIndex(l=>l.id===currentEditId);
+  if(idx >= 0){
+    appData.archived[idx] = {...appData.archived[idx], name, url, category:cat, description:desc, updatedAt:nowStr()};
+    showToast({message:'Link arsip berhasil diperbarui',type:'success'});
   }
-  await saveData();
+  saveData();
   closeModal('modalArchived');
   renderCurrentPage();
-  showToast({message: editingId?'NAWALA diperbarui':'NAWALA ditambahkan', type:'success'});
-  editingId=null;
 }
 
-/* ============================================================
-   CONFIRM MECHANISM
-   ============================================================ */
-var pendingConfirm = null;
-
-function askConfirm({ title, message, icon, danger, onOk }){
-  document.getElementById('confirmTitle').textContent   = title||'Konfirmasi';
-  document.getElementById('confirmMsg').textContent     = message||'';
-  const iconWrap = document.getElementById('confirmIconWrap');
-  if(icon){
-    iconWrap.style.background = danger ? 'rgba(244,63,94,0.15)' : 'rgba(124,58,237,0.15)';
-    iconWrap.innerHTML = `<span style="font-size:18px;">${icon}</span>`;
+// =====================================================================
+// TOGGLE PASSWORD VISIBILITY
+// =====================================================================
+function togglePw(fieldId, btn){
+  const el = document.getElementById(fieldId);
+  if(!el) return;
+  if(el.type === 'password'){
+    el.type = 'text';
+    btn.innerHTML = '&#128584;';
   } else {
-    iconWrap.innerHTML='';
+    el.type = 'password';
+    btn.innerHTML = '&#128065;';
   }
-  const okBtn = document.getElementById('confirmOkBtn');
-  okBtn.className = danger ? 'btn btn-danger' : 'btn btn-primary';
-  pendingConfirm = onOk;
+}
+
+// =====================================================================
+// CONFIRM MODAL
+// =====================================================================
+let _confirmCallback = null;
+
+function openConfirm({title, message, type='info', okLabel='Ya, Lanjutkan'}){
+  document.getElementById('confirmTitle').textContent   = title;
+  document.getElementById('confirmMsg').textContent     = message;
+  document.getElementById('confirmOkBtn').textContent   = okLabel;
+
+  const iconWrap = document.getElementById('confirmIconWrap');
+  const okBtn    = document.getElementById('confirmOkBtn');
+
+  const configs = {
+    danger:  {bg:'rgba(244,63,94,0.15)',   icon:'&#x2715;',  color:'#f43f5e', btnClass:'btn-primary', btnStyle:'background:linear-gradient(135deg,#f43f5e,#e11d48);box-shadow:0 4px 14px rgba(244,63,94,0.35)'},
+    warning: {bg:'rgba(245,158,11,0.15)',  icon:'&#x26A0;',  color:'#f59e0b', btnClass:'btn-primary', btnStyle:'background:linear-gradient(135deg,#f59e0b,#d97706);box-shadow:0 4px 14px rgba(245,158,11,0.35)'},
+    info:    {bg:'rgba(99,102,241,0.15)',  icon:'&#x2139;',  color:'#6366f1', btnClass:'btn-primary', btnStyle:''},
+    success: {bg:'rgba(34,197,94,0.15)',   icon:'&#x2713;',  color:'#22c55e', btnClass:'btn-primary', btnStyle:'background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 14px rgba(34,197,94,0.35)'},
+  };
+  const cfg = configs[type] || configs.info;
+
+  iconWrap.style.background = cfg.bg;
+  iconWrap.style.color      = cfg.color;
+  iconWrap.innerHTML        = cfg.icon;
+  okBtn.style.cssText       = cfg.btnStyle;
+
   openModal('modalConfirm');
 }
 
 function confirmAction(){
   closeModal('modalConfirm');
-  if(typeof pendingConfirm === 'function') pendingConfirm();
-  pendingConfirm = null;
-}
-
-/* ============================================================
-   ARCHIVE / RESTORE / DELETE
-   ============================================================ */
-function confirmArchive(id){
-  const l = appData.links.find(x=>x.id===id);
-  if(!l) return;
-  askConfirm({
-    title:   'Arsipkan Link',
-    message: `Pindahkan "${l.name}" ke NAWALA?`,
-    icon:    '📦',
-    danger:  false,
-    onOk:    ()=>archiveLink(id)
-  });
-}
-
-async function archiveLink(id){
-  const idx = appData.links.findIndex(x=>x.id===id);
-  if(idx<0) return;
-  const l = {...appData.links[idx], archivedAt:nowStr()};
-  appData.links.splice(idx,1);
-  appData.archived.push(l);
-  await saveData();
-  renderCurrentPage();
-  showToast({message:'Link dipindah ke NAWALA', type:'success'});
-}
-
-function confirmRestore(id){
-  const l = appData.archived.find(x=>x.id===id);
-  if(!l) return;
-  askConfirm({
-    title:   'Pulihkan Link',
-    message: `Kembalikan "${l.name}" ke Link Aktif?`,
-    icon:    '🔄',
-    danger:  false,
-    onOk:    ()=>restoreLink(id)
-  });
-}
-
-async function restoreLink(id){
-  const idx = appData.archived.findIndex(x=>x.id===id);
-  if(idx<0) return;
-  const l = {...appData.archived[idx]};
-  delete l.archivedAt;
-  appData.archived.splice(idx,1);
-  appData.links.push(l);
-  await saveData();
-  renderCurrentPage();
-  showToast({message:'Link dipulihkan ke aktif', type:'success'});
-}
-
-function confirmDelete(id, type){
-  const arr = type==='link' ? appData.links : type==='loginData' ? appData.loginData : appData.archived;
-  const item = arr.find(x=>x.id===id);
-  if(!item) return;
-  askConfirm({
-    title:   'Hapus Permanen',
-    message: `Hapus "${item.name}" secara permanen? Tindakan ini tidak dapat dibatalkan.`,
-    icon:    '🗑️',
-    danger:  true,
-    onOk:    ()=>deleteItem(id, type)
-  });
-}
-
-async function deleteItem(id, type){
-  if(type==='link'){
-    appData.links = appData.links.filter(x=>x.id!==id);
-  } else if(type==='loginData'){
-    appData.loginData = appData.loginData.filter(x=>x.id!==id);
-  } else {
-    appData.archived = appData.archived.filter(x=>x.id!==id);
+  if(typeof _confirmCallback === 'function'){
+    const cb = _confirmCallback;
+    _confirmCallback = null;
+    cb();
   }
-  await saveData();
-  renderCurrentPage();
-  showToast({message:'Item dihapus', type:'success'});
 }
 
-/* ============================================================
-   SETTINGS
-   ============================================================ */
+// =====================================================================
+// DELETE
+// =====================================================================
+function confirmDelete(id, type){
+  _confirmCallback = ()=>{
+    if(type === 'active'){
+      appData.links = appData.links.filter(l=>l.id!==id);
+    } else if(type === 'login'){
+      appData.loginData = appData.loginData.filter(l=>l.id!==id);
+    } else if(type === 'archived'){
+      appData.archived = appData.archived.filter(l=>l.id!==id);
+    }
+    saveData();
+    renderCurrentPage();
+    showToast({message:'Data berhasil dihapus', type:'success'});
+  };
+  openConfirm({
+    title:'Hapus Permanen?',
+    message:'Tindakan ini tidak dapat dibatalkan. Data akan dihapus secara permanen.',
+    type:'danger',
+    okLabel:'Ya, Hapus'
+  });
+}
+
+// =====================================================================
+// ARCHIVE
+// =====================================================================
+function confirmArchive(id){
+  _confirmCallback = ()=>{
+    const item = appData.links.find(l=>l.id===id);
+    if(!item) return;
+    appData.links    = appData.links.filter(l=>l.id!==id);
+    appData.archived = [{...item, updatedAt:nowStr()}, ...appData.archived];
+    saveData();
+    renderCurrentPage();
+    showToast({message:'Link diarsipkan', type:'info'});
+  };
+  openConfirm({
+    title:'Arsipkan Link?',
+    message:'Link akan dipindahkan ke NAWALA. Anda dapat memulihkannya kapan saja.',
+    type:'warning',
+    okLabel:'Ya, Arsipkan'
+  });
+}
+
+// =====================================================================
+// RESTORE
+// =====================================================================
+function confirmRestore(id){
+  _confirmCallback = ()=>{
+    const item = appData.archived.find(l=>l.id===id);
+    if(!item) return;
+    appData.archived = appData.archived.filter(l=>l.id!==id);
+    appData.links    = [{...item, updatedAt:nowStr()}, ...appData.links];
+    saveData();
+    renderCurrentPage();
+    showToast({message:'Link dipulihkan', type:'success'});
+  };
+  openConfirm({
+    title:'Pulihkan Link?',
+    message:'Link akan dikembalikan ke daftar Link Aktif.',
+    type:'info',
+    okLabel:'Ya, Pulihkan'
+  });
+}
+
+// =====================================================================
+// BACKGROUND
+// =====================================================================
+function loadBg(){
+  // Background diambil dari konstanta BG_URL & BG_DIM di bagian atas script
+  applyBg(BG_URL, BG_DIM);
+}
+
+function applyBg(url, dim){
+  const bg    = document.getElementById('dashboardBg');
+  const dimEl = document.getElementById('dashboardBgDim');
+  if(!bg || !dimEl) return;
+  bg.style.backgroundImage = `url("${url}")`;
+  bg.style.backgroundSize  = 'cover';
+  bg.style.backgroundPosition = 'center';
+  dimEl.style.background   = `rgba(0,0,0,${dim})`;
+  localStorage.setItem(LS_BG, JSON.stringify({url, dim}));
+}
+
+function previewDim(val){
+  const dim   = parseFloat(val) / 100;
+  const dimEl = document.getElementById('dashboardBgDim');
+  const label = document.getElementById('dimLabel');
+  if(label) label.textContent = val;
+  if(!dimEl) return;
+  // Only update if we have a bg set
+  const raw = localStorage.getItem(LS_BG);
+  if(!raw) return;
+  try{
+    const saved = JSON.parse(raw);
+    dimEl.style.background = `rgba(0,0,0,${dim})`;
+    localStorage.setItem(LS_BG, JSON.stringify({url:saved.url, dim}));
+  } catch(e){}
+}
+
+function applyBgFromSettings(){
+  const fileInput = document.getElementById('mBgFile');
+  const urlInput  = document.getElementById('mBgUrl');
+  const dimSlider = document.getElementById('mBgDim');
+  const dim = parseFloat(dimSlider.value) / 100;
+
+  if(fileInput && fileInput.files && fileInput.files.length > 0){
+    const file   = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e){
+      applyBg(e.target.result, dim);
+      showToast({message:'Latar belakang berhasil diterapkan', type:'success'});
+    };
+    reader.readAsDataURL(file);
+    return;
+  }
+
+  const url = urlInput ? urlInput.value.trim() : '';
+  if(url){
+    applyBg(url, dim);
+    showToast({message:'Latar belakang berhasil diterapkan', type:'success'});
+    return;
+  }
+
+  showToast({message:'Pilih file atau masukkan URL gambar terlebih dahulu', type:'error'});
+}
+
+function clearBg(){
+  const bg    = document.getElementById('dashboardBg');
+  const dimEl = document.getElementById('dashboardBgDim');
+  if(bg){
+    bg.style.backgroundImage = '';
+  }
+  if(dimEl){
+    dimEl.style.background = 'rgba(0,0,0,0)';
+  }
+  localStorage.removeItem(LS_BG);
+  const fileInput = document.getElementById('mBgFile');
+  const urlInput  = document.getElementById('mBgUrl');
+  const slider    = document.getElementById('mBgDim');
+  const label     = document.getElementById('dimLabel');
+  if(fileInput) fileInput.value = '';
+  if(urlInput)  urlInput.value  = '';
+  if(slider)    slider.value    = 55;
+  if(label)     label.textContent = '55';
+  showToast({message:'Latar belakang dihapus', type:'info'});
+}
+
+// =====================================================================
+// SETTINGS MODAL
+// =====================================================================
 function openSettingsModal(){
-  const bg = getBgSettings();
-  document.getElementById('sBgUrl').value = bg.url||'';
-  document.getElementById('sBgDim').value = bg.dim!==undefined ? bg.dim : 0.7;
-  document.getElementById('sBgDimVal').textContent = bg.dim!==undefined ? bg.dim : 0.7;
-  ['sCurPass','sNewPass','sConfPass','s2faCur','s2faNew'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('errSettingsPass').classList.remove('show');
+  // Kolom 2FA selalu kosong - kode tersimpan TIDAK pernah ditampilkan (privasi)
+  document.getElementById('mSet2FAcur').value = '';
+  document.getElementById('mSet2FA').value    = '';
   document.getElementById('errSettings2FA').classList.remove('show');
+  // Reset form ubah password
+  document.getElementById('mCurPass').value  = '';
+  document.getElementById('mNewPass').value  = '';
+  document.getElementById('mNewPass2').value = '';
+  document.getElementById('errSettingsPass').classList.remove('show');
   openModal('modalSettings');
 }
 
 function save2FASettings(){
-  const curInput = document.getElementById('s2faCur').value;
-  const newCode  = document.getElementById('s2faNew').value;
-  const errEl    = document.getElementById('errSettings2FA');
-  errEl.classList.remove('show');
+  const err = document.getElementById('errSettings2FA');
+  err.classList.remove('show');
 
-  const stored2fa = getSettings2FA();
-  // If 2FA is currently set, validate current code
-  if(stored2fa){
-    if(!curInput){ errEl.textContent='Masukkan kode 2FA aktif.'; errEl.classList.add('show'); return; }
-    if(fnv1a(curInput+SALT) !== stored2fa){ errEl.textContent='Kode 2FA saat ini salah.'; errEl.classList.add('show'); return; }
+  const cur = document.getElementById('mSet2FAcur').value.trim();
+  const val = document.getElementById('mSet2FA').value.trim();
+
+  if(!cur){
+    err.textContent = 'Masukkan kode 2FA saat ini terlebih dahulu.';
+    err.classList.add('show');
+    return;
   }
-  // Save new (or clear)
-  setSettings2FA(newCode||null);
-  document.getElementById('s2faCur').value='';
-  document.getElementById('s2faNew').value='';
-  showToast({message: newCode ? '2FA diperbarui' : '2FA dinonaktifkan', type:'success'});
+  if(cur !== getSettings2FA()){
+    err.textContent = 'Kode 2FA saat ini salah.';
+    err.classList.add('show');
+    return;
+  }
+
+  setSettings2FA(val);
+  // Reset 2FA session so admin must re-verify with new code
+  twoFAVerified = false;
+  document.getElementById('mSet2FAcur').value = '';
+  document.getElementById('mSet2FA').value    = '';
+  showToast({message:'Kode 2FA diperbarui', type:'success'});
+}
+
+function getValidHash(){
+  const stored = localStorage.getItem(LS_PASS);
+  return (stored && stored.trim() !== '') ? stored : DEFAULT_HASH;
 }
 
 function savePasswordChange(){
-  const cur  = document.getElementById('sCurPass').value;
-  const nw   = document.getElementById('sNewPass').value;
-  const conf = document.getElementById('sConfPass').value;
-  const errEl = document.getElementById('errSettingsPass');
-  errEl.classList.remove('show');
+  const err = document.getElementById('errSettingsPass');
+  err.classList.remove('show');
+  const cur  = document.getElementById('mCurPass').value;
+  const np   = document.getElementById('mNewPass').value;
+  const np2  = document.getElementById('mNewPass2').value;
 
-  if(!cur){ errEl.textContent='Masukkan password saat ini.'; errEl.classList.add('show'); return; }
-  if(fnv1a(cur+SALT) !== getValidHash()){ errEl.textContent='Password saat ini salah.'; errEl.classList.add('show'); return; }
-  if(nw.length < 4){ errEl.textContent='Password baru minimal 4 karakter.'; errEl.classList.add('show'); return; }
-  if(nw !== conf){ errEl.textContent='Konfirmasi password tidak cocok.'; errEl.classList.add('show'); return; }
-
-  const newHash = fnv1a(nw+SALT);
-  localStorage.setItem(LS_PASS, newHash);
-  currentHash = newHash;
-  // Update remember-me if active
-  const rem = localStorage.getItem(LS_REMEMBER);
-  if(rem){ try{ const d=JSON.parse(rem); localStorage.setItem(LS_REMEMBER, JSON.stringify({...d, hash:newHash})); }catch(e){} }
-  document.getElementById('sCurPass').value='';
-  document.getElementById('sNewPass').value='';
-  document.getElementById('sConfPass').value='';
-  updateDefaultWarnBanner();
-  showToast({message:'Password berhasil diubah', type:'success'});
-}
-
-function saveBgSettings(){
-  const url = document.getElementById('sBgUrl').value.trim();
-  const dim = parseFloat(document.getElementById('sBgDim').value)||0.7;
-  localStorage.setItem(LS_BG, JSON.stringify({url, dim}));
-  loadBg();
-  showToast({message:'Background disimpan', type:'success'});
-}
-
-/* ============================================================
-   BACKGROUND
-   ============================================================ */
-function loadBg(){
-  const bg = getBgSettings();
-  const BG_URL = bg.url||'';
-  const BG_DIM = bg.dim!==undefined ? bg.dim : 0.7;
-  const bgEl  = document.getElementById('dashboardBg');
-  const dimEl = document.getElementById('dashboardBgDim');
-  if(BG_URL){
-    bgEl.style.backgroundImage = `url(${BG_URL})`;
-  } else {
-    bgEl.style.backgroundImage = '';
+  if(!cur || !np || !np2){
+    err.textContent = 'Semua kolom password wajib diisi.';
+    err.classList.add('show');
+    return;
   }
-  dimEl.style.background = `rgba(13,13,26,${BG_DIM})`;
-}
-
-/* ============================================================
-   TOAST
-   ============================================================ */
-function showToast({ message, type }){
-  const colors = { success:'#22c55e', error:'#f43f5e', warning:'#f59e0b', info:'#6366f1' };
-  const color  = colors[type]||colors.info;
-  const tc     = document.getElementById('toastContainer');
-  const t      = document.createElement('div');
-  t.className  = 'toast';
-  t.innerHTML  = `<div class="toast-dot" style="background:${color};"></div><span>${esc(message)}</span>`;
-  tc.appendChild(t);
-  setTimeout(()=>{
-    t.classList.add('fade-out');
-    setTimeout(()=>t.remove(), 350);
-  }, 3000);
-}
-
-/* ============================================================
-   MISC UI
-   ============================================================ */
-function togglePw(id, btn){
-  const inp = document.getElementById(id);
-  if(inp.type==='password'){ inp.type='text'; btn.innerHTML='&#128064;'; }
-  else { inp.type='password'; btn.innerHTML='&#128065;'; }
-}
-
-function esc(str){
-  if(!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-/* ============================================================
-   KEYBOARD SHORTCUT — press Enter on login
-   ============================================================ */
-document.addEventListener('keydown', function(e){
-  if(e.key==='Enter' && document.getElementById('loginPage').style.display!=='none'){
-    doLogin();
+  if(fnv1a(cur + SALT) !== getValidHash()){
+    err.textContent = 'Password saat ini salah.';
+    err.classList.add('show');
+    return;
   }
+  if(np.length < 6){
+    err.textContent = 'Password baru minimal 6 karakter.';
+    err.classList.add('show');
+    return;
+  }
+  if(np !== np2){
+    err.textContent = 'Konfirmasi password baru tidak cocok.';
+    err.classList.add('show');
+    return;
+  }
+
+  localStorage.setItem(LS_PASS, fnv1a(np + SALT));
+  currentHash = fnv1a(np + SALT);
+  // Sembunyikan peringatan password default
+  document.getElementById('defaultWarnBanner').style.display = 'none';
+
+  document.getElementById('mCurPass').value  = '';
+  document.getElementById('mNewPass').value  = '';
+  document.getElementById('mNewPass2').value = '';
+  closeModal('modalSettings');
+  showToast({message:'Password berhasil diubah. Gunakan password baru saat login berikutnya.', type:'success'});
+}
+
+// =====================================================================
+// INIT
+// =====================================================================
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadData();
+  loadAuth();
+  checkAutoLogin();
+  // Lockout resume
+  if(isLockedOut()) startLockoutCountdown();
+  // Enter key on login
+  document.getElementById('loginPass').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') doLogin();
+  });
+  document.getElementById('loginUser').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') doLogin();
+  });
 });
-
-/* ============================================================
-   BOOT
-   ============================================================ */
-document.addEventListener('DOMContentLoaded', ()=>{ checkAutoLogin(); });
 </script>
 </body>
 </html>
