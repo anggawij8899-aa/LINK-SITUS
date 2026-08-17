@@ -431,14 +431,18 @@ input[type=range]{width:100%;accent-color:#7c3aed;}
 // =====================================================================
 // CONSTANTS & CONFIG
 // =====================================================================
-const SALT = 'lv_salt_2024';
 const LS_DATA = 'linkDashboardData';
 const LS_AUTH = 'linkDashboardAuth';
 const LS_BG   = 'linkDashboardBg';
 const LS_2FA  = 'linkDashboard2FA';
 const DEFAULT_HASH = fnv1a('Anggawi1212#' + SALT);
-const DEFAULT_2FA  = '123456';
-const LS_PASS      = 'linkDashboardPassHash';
+
+// ===== SUPABASE UNTUK SYNC ANTAR PERANGKAT =====
+const SUPABASE_URL    = 'https://isxclndqezfyjimfskbg.supabase.co/rest/v1/';  // GANTI: Project URL
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzeGNsbmRxZXpmeWppbWZza2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk0NDQsImV4cCI6MjEwMjM5NTQ0NH0.fhMLsc5R-_CGDa8xMdDolscWG9wywHDhleA8RkDdvt8';               // GANTI: anon public key
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const DB_KEY   = 'link_vault_data'; // nama baris tempat data disimpan
 
 // =====================================================================
 // BACKGROUND - hanya bisa diganti dari dalam script ini bos
@@ -504,21 +508,58 @@ function escHtml(str){
 // =====================================================================
 let appData = {links:[], loginData:[], archived:[]};
 
-function loadData(){
+async function loadData(){
+  // 1) Tampilkan data lokal dulu (biar cepat, walau offline)
+  normalizeData();
   try{
     const raw = localStorage.getItem(LS_DATA);
     if(raw) appData = JSON.parse(raw);
-    if(!appData.links)     appData.links = [];
-    if(!appData.loginData) appData.loginData = [];
-    if(!appData.archived)  appData.archived = [];
-  } catch(e){
+    normalizeData();
+  }catch(e){
     appData = {links:[], loginData:[], archived:[]};
+  }
+
+  // 2) Ambil versi paling baru dari cloud (Supabase)
+  try{
+    const { data, error } = await supabase
+      .from('app_data')
+      .select('data')
+      .eq('key', DB_KEY)
+      .maybeSingle();
+    if(error) throw error;
+
+    if(data && data.data){
+      appData = data.data;
+      normalizeData();
+      localStorage.setItem(LS_DATA, JSON.stringify(appData)); // update cache lokal
+      updateBadges();
+      if(typeof currentUser !== 'undefined' && currentUser) renderCurrentPage();
+    }
+  }catch(e){
+    console.warn('Gagal ambil dari cloud, pakai data lokal:', e.message);
   }
 }
 
-function saveData(){
+function normalizeData(){
+  if(!appData.links)     appData.links = [];
+  if(!appData.loginData) appData.loginData = [];
+  if(!appData.archived)  appData.archived = [];
+}
+
+async function saveData(){
+  // cache lokal dulu biar tetap jalan walau lagi offline
   localStorage.setItem(LS_DATA, JSON.stringify(appData));
   updateBadges();
+
+  // simpan ke cloud supaya muncul di perangkat lain
+  try{
+    const { error } = await supabase
+      .from('app_data')
+      .upsert({ key: DB_KEY, data: appData, updated_at: new Date().toISOString() });
+    if(error) throw error;
+  }catch(e){
+    console.warn('Gagal simpan ke cloud:', e.message);
+  }
 }
 
 function genId(){
