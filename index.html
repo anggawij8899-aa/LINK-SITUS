@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --bg-base:#0d0d1a;
@@ -438,7 +439,7 @@ const LS_2FA  = 'linkDashboard2FA';
 const DEFAULT_HASH = fnv1a('Anggawi1212#' + SALT);
 
 // ===== SUPABASE UNTUK SYNC ANTAR PERANGKAT =====
-const SUPABASE_URL    = 'https://isxclndqezfyjimfskbg.supabase.co/rest/v1/';  // GANTI: Project URL
+const SUPABASE_URL    = 'const SUPABASE_URL    = 'https://isxclndqezfyjimfskbg.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzeGNsbmRxZXpmeWppbWZza2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk0NDQsImV4cCI6MjEwMjM5NTQ0NH0.fhMLsc5R-_CGDa8xMdDolscWG9wywHDhleA8RkDdvt8';               // GANTI: anon public key
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
